@@ -1,0 +1,16 @@
+@import "_variables.scss";
+
+.btn {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  border-radius: 0.2rem;
+  border: none;
+  background: transparent;
+  font-weight: 600;
+
+  &.blue {
+    background-color: $blue;
+    color: $white;
+  }
+}

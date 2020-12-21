@@ -1,0 +1,34 @@
+.auth_container {
+  width: 100%;
+  height: 100vh;
+  background: #2f3136;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+
+  .auth_content {
+    width: 500px;
+    max-width: 95%;
+    background: #36393f;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 20px 0 rgba(48, 51, 57, 0.2);
+  }
+}
+
+.auth_title {
+  text-align: center;
+  padding-bottom: 1.2rem;
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  p {
+    font-size: 1.1rem;
+    margin-top: 0.2rem;
+    color: #8e9297;
+  }
+}

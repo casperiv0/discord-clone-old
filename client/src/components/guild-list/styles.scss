@@ -1,0 +1,56 @@
+@import "../../styles/variables";
+
+.guild_list {
+  background: #202225;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+
+  .divider {
+    height: 2px;
+    width: 70%;
+    border-radius: 0.5rem;
+    background: #2d2f32;
+  }
+
+  .guild_list_item {
+    margin: 0.4rem 0;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #36393f;
+    color: #fff;
+    border-radius: 50%;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    font-size: 1.2rem;
+    transition: border-radius 200ms, background 200ms;
+
+    &:hover {
+      border-radius: 25%;
+      background: $blue;
+    }
+
+    &.active {
+      border-radius: 25%;
+      background: $blue;
+    }
+
+    &.special {
+      color: $green;
+      font-weight: bold;
+
+      &:hover {
+        background: $green;
+        color: $white;
+      }
+    }
+  }
+}

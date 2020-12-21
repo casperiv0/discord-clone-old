@@ -1,0 +1,28 @@
+@import "../../styles/variables";
+
+.guild_channels_list {
+  background: #2f3136;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+
+  .guild_channel_item {
+    width: 100%;
+    text-decoration: none;
+    color: rgb(202, 202, 202);
+    font-size: 1.1rem;
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+
+    &:hover {
+      background: #34363c;
+    }
+
+    &.active {
+      background: #393c43;
+      color: $white;
+    }
+  }
+}

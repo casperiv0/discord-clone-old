@@ -1,0 +1,16 @@
+@import "_variables.scss";
+
+*,
+*::after,
+*::before {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Assistant, sans-serif;
+}
+
+.app-container {
+  display: grid;
+  grid-template-columns: 80px 250px auto 250px;
+  height: 100vh;
+}
