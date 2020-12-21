@@ -4,13 +4,15 @@ import { Link } from "react-router-dom";
 import { login } from "../../lib/actions/auth";
 import State from "../../interfaces/State";
 import "./auth.styles.scss";
+import Loader from "../../components/loader";
 
 interface Props {
   error: string | null;
+  loading: boolean;
   login: (data: unknown) => void;
 }
 
-const LoginPage: FC<Props> = ({ login, error }) => {
+const LoginPage: FC<Props> = ({ login, error, loading }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -49,7 +51,7 @@ const LoginPage: FC<Props> = ({ login, error }) => {
         </div>
         <div className="form_group">
           <button className="btn blue" type="submit">
-            Login
+            {loading ? <Loader /> : "Login"}
           </button>
           <small>
             Need an account? <Link to="/register">Register</Link>
@@ -62,6 +64,7 @@ const LoginPage: FC<Props> = ({ login, error }) => {
 
 const mapToProps = (state: State) => ({
   error: state.auth.error,
+  loading: state.auth.loading,
 });
 
 export default connect(mapToProps, { login })(LoginPage);

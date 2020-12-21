@@ -1,16 +1,20 @@
 import { FC, FormEvent, useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import Loader from "../../components/loader";
 import State from "../../interfaces/State";
 import { register } from "../../lib/actions/auth";
 import "./auth.styles.scss";
 
 interface Props {
   error: string | null;
+  loading: boolean;
   register: (data: unknown) => void;
 }
 
-const RegisterPage: FC<Props> = ({ error, register }) => {
+// TODO: add error-message component
+
+const RegisterPage: FC<Props> = ({ error, loading, register }) => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -68,7 +72,7 @@ const RegisterPage: FC<Props> = ({ error, register }) => {
         </div>
         <div className="form_group">
           <button className="btn blue" type="submit">
-            Continue
+            {loading ? <Loader /> : "Continue"}
           </button>
           <small>
             <Link to="/login">Already have an account?</Link>
@@ -81,6 +85,7 @@ const RegisterPage: FC<Props> = ({ error, register }) => {
 
 const mapToProps = (state: State) => ({
   error: state.auth.error,
+  loading: state.auth.loading,
 });
 
 export default connect(mapToProps, { register })(RegisterPage);

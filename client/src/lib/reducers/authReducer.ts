@@ -1,5 +1,5 @@
 import State from "../../interfaces/State";
-import { AUTHENTICATE, AUTH_ERROR } from "../types";
+import { AUTHENTICATE, AUTH_ERROR, SET_LOADING } from "../types";
 
 const initState: State["auth"] = {
   isAuth: false,
@@ -16,6 +16,10 @@ type Actions =
   | {
       type: typeof AUTH_ERROR;
       error: string;
+    }
+  | {
+      type: typeof SET_LOADING;
+      loading: boolean;
     };
 
 export default function authReducer(state = initState, action: Actions): State["auth"] {
@@ -31,6 +35,12 @@ export default function authReducer(state = initState, action: Actions): State["
       return {
         ...state,
         error: action.error,
+      };
+    }
+    case "SET_LOADING": {
+      return {
+        ...state,
+        loading: action.loading,
       };
     }
     default: {

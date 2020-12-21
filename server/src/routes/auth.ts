@@ -3,7 +3,7 @@ import { compareSync, hashSync } from "bcryptjs";
 import { errorObj } from "../utils/utils";
 import UserModel from "../models/User.model";
 import IRequest from "../interfaces/IRequest";
-import { useToken } from "../hooks";
+import { useAuth, useToken } from "../hooks";
 const router = Router();
 
 const cookieExpiresIn = 60 * 60 * 1000 * 24 * 7; /* 1week */
@@ -82,6 +82,10 @@ router.post("/register", async (req: IRequest, res: Response) => {
   });
 
   return res.json({ status: "success", user: { _id: newUser._id } });
+});
+
+router.post("/user", useAuth, async (req: IRequest, res: Response) => {
+  return res.json({ status: "success", user_id: req.user?._id });
 });
 
 export default router;
