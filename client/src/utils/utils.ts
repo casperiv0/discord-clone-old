@@ -29,3 +29,27 @@ export function handleRequest(
 export function isSuccess(res: AxiosResponse<{ status: "error" | "success" }>): boolean {
   return res.data.status && res.data.status === "success";
 }
+
+export const openSidebar = (id: string): void => {
+  document.querySelector(`#${id}Active`)?.classList.add("active");
+  document.querySelector(`#${id}`)?.classList.add("active");
+};
+
+export const closeSidebar = (id: string): void => {
+  document.querySelector(`#${id}Active`)?.classList.remove("active");
+  document.querySelector(`#${id}`)?.classList.remove("active");
+};
+
+export const openModal = (id: string): void => {
+  document.querySelector(`#${id}`)?.classList.add("active");
+  document.querySelector(`#style-${id}`)?.classList.remove("closed");
+  document.querySelector(`#style-${id}`)?.classList.add("active");
+};
+
+export const closeModal = (id: string): void => {
+  document.querySelector(`#style-${id}`)?.classList.replace("active", "closed");
+
+  setTimeout(() => {
+    document.querySelector(`#${id}`)?.classList.remove("active");
+  }, 105);
+};

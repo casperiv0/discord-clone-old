@@ -11,28 +11,40 @@ import { errorObj } from "../utils/utils";
 const router = Router();
 
 router.post("/", useAuth, async (req: IRequest, res: Response) => {
-  const { guild_id } = req.query;
+  const { guild_id, type } = req.query;
   const { name } = req.body;
 
   if (!guild_id) {
-    return res.json(errorObj("You must provide a guild_id"));
+    return res.json(errorObj("You must provide a guild_id")).status(400);
   }
 
   if (!name) {
-    return res.json(errorObj("Please provide a channel name"));
+    return res.json(errorObj("Please provide a channel name")).status(400);
   }
 
   const newChannel = new ChannelModel({
-    name: slugify(name, { replacement: "-", lower: true }),
+    name: type === "1" ? slugify(name, { replacement: "-", lower: true }) : name,
     guild_id,
   });
   const guild = await GuildModel.findById(guild_id);
 
   if (!guild) {
-    return res.json(errorObj("Guild was not found"));
+    return res.json(errorObj("Guild was not found")).status(404);
   }
 
-  guild.channel_ids = [...guild.channel_ids, newChannel._id.toString()];
+  switch (type) {
+    case "1": {
+      guild.channel_ids = [...guild.channel_ids, newChannel._id.toString()];
+      break;
+    }
+    case "2": {
+      guild.category_ids = [...guild.category_ids, newChannel._id.toString()];
+      break;
+    }
+    default: {
+      return res.json(errorObj("Invalid type was provided")).status(400);
+    }
+  }
 
   try {
     await newChannel.save();

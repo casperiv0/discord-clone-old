@@ -13,6 +13,7 @@ interface State {
   };
   channel: {
     channel: Channel | null;
+    error: string | null;
   };
 }
 

@@ -4,7 +4,9 @@ interface Guild {
   region: string;
   avatar: string | null;
   channel_ids: string[];
+  category_ids: string[];
   channels: Channel[];
+  categories: Channel[];
 }
 
 export interface Channel {

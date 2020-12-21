@@ -1,14 +1,15 @@
 import { Dispatch } from "react";
-import { Channel } from "../../interfaces/Guild";
+import Guild, { Channel } from "../../interfaces/Guild";
 import Logger from "../../utils/Logger";
-import { handleRequest, isSuccess } from "../../utils/utils";
-import { GET_CHANNEL_BY_ID } from "../types";
+import { closeModal, handleRequest, isSuccess } from "../../utils/utils";
+import { GET_CHANNEL_BY_ID, CREATE_CHANNEL, CHANNEL_ERROR } from "../types";
 
 interface IDispatch {
   type: string;
   channel?: Channel;
   error?: string;
   loading?: boolean;
+  guild?: Guild;
 }
 
 export const getChannelById = (channelId: string, guildId: string) => async (
@@ -26,5 +27,52 @@ export const getChannelById = (channelId: string, guildId: string) => async (
     }
   } catch (e) {
     console.error(e);
+  }
+};
+
+export const createCategory = (name: string, guildId: string) => async (
+  dispatch: Dispatch<IDispatch>
+): Promise<void> => {
+  try {
+    const res = await handleRequest(`/channels?guild_id=${guildId}&type=2`, "POST", { name });
+
+    if (isSuccess(res)) {
+      dispatch({
+        type: CREATE_CHANNEL,
+      });
+      closeModal("create-category-modal");
+    } else {
+      dispatch({
+        type: CHANNEL_ERROR,
+        error: res.data.error,
+      });
+    }
+  } catch (e) {
+    Logger.error(CREATE_CHANNEL, e);
+  }
+};
+
+export const createChannel = (name: string, guildId: string) => async (
+  dispatch: Dispatch<IDispatch>
+): Promise<void> => {
+  try {
+    const res = await handleRequest(`/channels?guild_id=${guildId}&type=1`, "POST", {
+      name,
+    });
+
+    if (isSuccess(res)) {
+      dispatch({
+        type: CREATE_CHANNEL,
+      });
+
+      closeModal("create-channel-modal");
+    } else {
+      dispatch({
+        type: CHANNEL_ERROR,
+        error: res.data.error,
+      });
+    }
+  } catch (e) {
+    Logger.error(CREATE_CHANNEL, e);
   }
 };

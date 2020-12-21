@@ -8,9 +8,14 @@
   border: none;
   background: transparent;
   font-weight: 600;
+  transition: filter 200ms;
 
   &.blue {
     background-color: $blue;
     color: $white;
+  }
+
+  &:hover {
+    filter: brightness(90%);
   }
 }
