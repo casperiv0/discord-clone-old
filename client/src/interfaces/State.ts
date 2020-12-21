@@ -10,7 +10,9 @@ interface State {
   guild: {
     guilds: Guild[];
     guild: Guild | null;
-    channels: Channel[];
+  };
+  channel: {
+    channel: Channel | null;
   };
 }
 

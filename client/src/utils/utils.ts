@@ -1,4 +1,5 @@
 import axios, { AxiosPromise, AxiosResponse } from "axios";
+import Guild, { Channel } from "../interfaces/Guild";
 
 type AllowedMethods = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -10,8 +11,11 @@ export function handleRequest(
   data?: unknown
 ): AxiosPromise<{
   status: "error" | "success";
-  error?: string;
-  user_id?: string;
+  error: string;
+  user_id: string;
+  guilds: Guild[];
+  guild: Guild;
+  channel: Channel;
   [key: string]: unknown;
 }> {
   return axios({

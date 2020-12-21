@@ -1,12 +1,10 @@
-import guilds, { channels } from "../../data/guilds";
 import Guild from "../../interfaces/Guild";
 import State from "../../interfaces/State";
-import { GET_GUILD_BY_ID, GET_USER_GUILDS } from "../types";
+import { GET_GUILD_BY_ID, GET_USER_GUILDS, SET_LOADING } from "../types";
 
 const initState: State["guild"] = {
-  guilds: guilds,
-  guild: guilds[0],
-  channels: channels,
+  guilds: [],
+  guild: null,
 };
 
 type Actions =
@@ -17,6 +15,10 @@ type Actions =
   | {
       type: typeof GET_GUILD_BY_ID;
       guild: Guild | null;
+    }
+  | {
+      type: typeof SET_LOADING;
+      loading: boolean;
     };
 
 export default function guildReducer(state = initState, action: Actions): State["guild"] {

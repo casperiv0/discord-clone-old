@@ -46,8 +46,8 @@ router.get("/:guild_id", useAuth, async (req: IRequest, res: Response) => {
     return res.json(errorObj("User was not found"));
   }
 
-  if (user.guilds.find((id) => id !== guild_id)) {
-    return res.json(errorObj("User is not in this guilds")).status(401);
+  if (!user.guilds.includes(guild_id)) {
+    return res.json(errorObj("User is not in this guild")).status(401);
   }
 
   const guild = await GuildModel.findById(guild_id);

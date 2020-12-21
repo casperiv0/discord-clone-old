@@ -5,6 +5,7 @@ import { login } from "../../lib/actions/auth";
 import State from "../../interfaces/State";
 import "./auth.styles.scss";
 import Loader from "../../components/loader";
+import ErrorMessage from "../../components/error-message";
 
 interface Props {
   error: string | null;
@@ -25,14 +26,15 @@ const LoginPage: FC<Props> = ({ login, error, loading }) => {
   return (
     <div className="auth_container">
       <form onSubmit={onSubmit} className="auth_content">
-        {error ? <p>{error}</p> : null}
         <div className="auth_title">
           <h1> Welcome Back!</h1>
           <p>We&apos;re so exited to see you again!</p>
         </div>
+        {error ? <ErrorMessage message={error} type="warning" /> : null}
         <div className="form_group">
           <label htmlFor="email">EMAIL</label>
           <input
+            type="email"
             className="form_input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}

@@ -11,6 +11,12 @@
 
 .app-container {
   display: grid;
-  grid-template-columns: 80px 250px auto 250px;
+  grid-template-areas:
+    "guilds nav nav nav"
+    "guilds channels messages members"
+    "guilds channels messages members"
+    "guilds channels messages members";
+  grid-template-rows: 50px;
+  grid-template-columns: 70px 250px auto 250px;
   height: 100vh;
 }

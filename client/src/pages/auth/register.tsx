@@ -1,6 +1,7 @@
 import { FC, FormEvent, useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import ErrorMessage from "../../components/error-message";
 import Loader from "../../components/loader";
 import State from "../../interfaces/State";
 import { register } from "../../lib/actions/auth";
@@ -11,8 +12,6 @@ interface Props {
   loading: boolean;
   register: (data: unknown) => void;
 }
-
-// TODO: add error-message component
 
 const RegisterPage: FC<Props> = ({ error, loading, register }) => {
   const [email, setEmail] = useState("");
@@ -32,9 +31,11 @@ const RegisterPage: FC<Props> = ({ error, loading, register }) => {
         <div className="auth_title">
           <h1>Create an account</h1>
         </div>
+        {error ? <ErrorMessage message={error} type="warning" /> : null}
         <div className="form_group">
           <label htmlFor="email">EMAIL</label>
           <input
+            type="email"
             className="form_input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}

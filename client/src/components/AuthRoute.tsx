@@ -1,27 +1,19 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useEffect } from "react";
 import { connect } from "react-redux";
-import { Route, Redirect, RouteChildrenProps } from "react-router-dom";
+import { Route, RouteChildrenProps } from "react-router-dom";
 import State from "../interfaces/State";
 import { checkAuth } from "../lib/actions/auth";
 import Loader from "./loader";
 
 interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   component: any;
-  isAuth: boolean;
   loading: boolean;
   checkAuth: () => void;
   path: string;
-  user_id: string | null;
 }
 
-const AuthRoute: FC<Props> = ({
-  path,
-  component: Component,
-  isAuth,
-  loading,
-  checkAuth,
-  user_id,
-}) => {
+const AuthRoute: FC<Props> = ({ path, component: Component, loading, checkAuth }) => {
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
@@ -29,20 +21,12 @@ const AuthRoute: FC<Props> = ({
   if (loading) return <Loader color="#7289DA" size={15} fullScreen />;
 
   return (
-    <Route
-      path={path}
-      exact
-      render={(props: RouteChildrenProps) =>
-        user_id !== null && isAuth ? <Component {...props} /> : <Component {...props} />
-      }
-    />
+    <Route path={path} exact render={(props: RouteChildrenProps) => <Component {...props} />} />
   );
 };
 
 const mapToProps = (state: State) => ({
-  isAuth: state.auth.isAuth,
   loading: state.auth.loading,
-  user_id: state.auth.user_id,
 });
 
 export default connect(mapToProps, { checkAuth })(AuthRoute);

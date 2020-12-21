@@ -66,8 +66,6 @@ export const checkAuth = () => async (dispatch: Dispatch<IDispatch>): Promise<vo
   try {
     const res = await handleRequest("/auth/user", "POST");
 
-    console.log(res.data);
-
     if (isSuccess(res)) {
       dispatch({
         type: AUTHENTICATE,

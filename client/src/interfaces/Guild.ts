@@ -1,12 +1,14 @@
 interface Guild {
-  id: string;
+  _id: string;
   name: string;
   region: string;
   avatar: string | null;
+  channel_ids: string[];
+  channels: Channel[];
 }
 
 export interface Channel {
-  id: string;
+  _id: string;
   guild_id: string;
   name: string;
   parent_id: string;

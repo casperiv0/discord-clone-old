@@ -1,6 +1,7 @@
 @import "../../styles/variables";
 
 .guild_list {
+  grid-area: guilds;
   background: #202225;
   width: 100%;
   height: 100%;
@@ -13,13 +14,14 @@
     height: 2px;
     width: 70%;
     border-radius: 0.5rem;
+    margin: 0.2rem 0;
     background: #2d2f32;
   }
 
   .guild_list_item {
-    margin: 0.4rem 0;
-    width: 60px;
-    height: 60px;
+    margin: 0.2rem 0;
+    width: 55px;
+    height: 55px;
     display: flex;
     justify-content: center;
     align-items: center;
