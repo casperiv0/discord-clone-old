@@ -3,8 +3,10 @@ import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
 import GuildChannelList from "../../components/channel-list";
 import GuildList from "../../components/guild-list";
+import MessagesList from "../../components/messages-list";
 import CreateCategoryModal from "../../components/modals/CreateCategoryModal";
 import CreateChannelModal from "../../components/modals/CreateChannelModal";
+import CreateGuildModal from "../../components/modals/CreateGuildModal";
 import TopicModal from "../../components/modals/TopicModal";
 import NavBar from "../../components/navbar";
 import { getChannelById } from "../../lib/actions/channel";
@@ -30,12 +32,13 @@ const GuildPage: FC<Props> = ({ getUserGuilds, getGuildById, getChannelById }) =
       <GuildList />
       <NavBar />
       <GuildChannelList />
-      <div style={{ gridArea: "messages" }}>messages</div>
+      <MessagesList />
       <div style={{ gridArea: "members" }}>member list</div>
 
       <TopicModal />
       <CreateCategoryModal />
       <CreateChannelModal />
+      <CreateGuildModal />
     </div>
   );
 };

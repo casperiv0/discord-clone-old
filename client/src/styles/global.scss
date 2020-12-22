@@ -9,6 +9,10 @@
   font-family: Assistant, sans-serif;
 }
 
+body {
+  background: $dark-gray;
+}
+
 .app-container {
   display: grid;
   grid-template-areas:

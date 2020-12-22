@@ -10,6 +10,7 @@ interface State {
   guild: {
     guilds: Guild[];
     guild: Guild | null;
+    error: string | null;
   };
   channel: {
     channel: Channel | null;

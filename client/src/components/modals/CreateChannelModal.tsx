@@ -5,6 +5,7 @@ import Modal from "./index";
 import { createChannel } from "../../lib/actions/channel";
 import { useParams } from "react-router-dom";
 import { getGuildById } from "../../lib/actions/guild";
+import ErrorMessage from "../error-message";
 
 interface Props {
   error: string | null;
@@ -49,6 +50,7 @@ const CreateChannelModal: FC<Props> = ({ error, createChannel, getGuildById }) =
     <Modal title="Create Channel" id="create-channel-modal">
       <div className="modal_body">
         <form id="create_channel_form" onSubmit={onSubmit}>
+          {error ? <ErrorMessage message={error} type="warning" /> : null}
           <div className="form_group">
             <label htmlFor="name">channel name</label>
             <input

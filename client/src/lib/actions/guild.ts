@@ -2,7 +2,7 @@ import { Dispatch } from "react";
 import Guild from "../../interfaces/Guild";
 import Logger from "../../utils/Logger";
 import { handleRequest, isSuccess } from "../../utils/utils";
-import { GET_GUILD_BY_ID, GET_USER_GUILDS } from "../types";
+import { GET_GUILD_BY_ID, GET_USER_GUILDS, CREATE_GUILD, GUILD_ERROR } from "../types";
 
 interface IDispatch {
   type: string;
@@ -11,6 +11,27 @@ interface IDispatch {
   error?: string;
   loading?: boolean;
 }
+
+export const createGuild = (data: unknown) => async (
+  dispatch: Dispatch<IDispatch>
+): Promise<void> => {
+  try {
+    const res = await handleRequest("/guilds", "POST", data);
+
+    if (isSuccess(res)) {
+      dispatch({
+        type: CREATE_GUILD,
+      });
+    } else {
+      dispatch({
+        type: GUILD_ERROR,
+        error: res.data.error,
+      });
+    }
+  } catch (e) {
+    Logger.error("create_guild", e);
+  }
+};
 
 export const getUserGuilds = () => async (
   dispatch: Dispatch<IDispatch>

@@ -1,0 +1,7 @@
+@import "../../styles/variables";
+
+.messages_list {
+  grid-area: messages;
+  min-width: 400px;
+  background: #36393f;
+}

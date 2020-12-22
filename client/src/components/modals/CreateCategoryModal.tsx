@@ -3,14 +3,17 @@ import { connect } from "react-redux";
 import State from "../../interfaces/State";
 import Modal from "./index";
 import { createCategory } from "../../lib/actions/channel";
+import { getGuildById } from "../../lib/actions/guild";
 import { useParams } from "react-router-dom";
+import ErrorMessage from "../error-message";
 
 interface Props {
   error: string | null;
   createCategory: (name: string, guildId: string) => void;
+  getGuildById: (id: string) => void;
 }
 
-const CreateCategoryModal: FC<Props> = ({ error, createCategory }) => {
+const CreateCategoryModal: FC<Props> = ({ error, createCategory, getGuildById }) => {
   const [name, setName] = useState<string>("");
   const params = useParams<{ guild_id: string }>();
 
@@ -18,12 +21,17 @@ const CreateCategoryModal: FC<Props> = ({ error, createCategory }) => {
     e.preventDefault();
 
     createCategory(name, params.guild_id);
+
+    setTimeout(() => {
+      getGuildById(params.guild_id);
+    }, 500);
   }
 
   return (
     <Modal title="Create Category" id="create-category-modal">
       <div className="modal_body">
         <form id="create_category_form" onSubmit={onSubmit}>
+          {error ? <ErrorMessage message={error} type="warning" /> : null}
           <div className="form_group">
             <label htmlFor="name">category name</label>
             <input
@@ -49,4 +57,4 @@ const mapToProps = (state: State) => ({
   error: state.channel.error,
 });
 
-export default connect(mapToProps, { createCategory })(CreateCategoryModal);
+export default connect(mapToProps, { createCategory, getGuildById })(CreateCategoryModal);

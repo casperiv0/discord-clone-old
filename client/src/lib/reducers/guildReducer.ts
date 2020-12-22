@@ -1,10 +1,11 @@
 import Guild from "../../interfaces/Guild";
 import State from "../../interfaces/State";
-import { GET_GUILD_BY_ID, GET_USER_GUILDS, SET_LOADING } from "../types";
+import { GET_GUILD_BY_ID, GET_USER_GUILDS, GUILD_ERROR } from "../types";
 
 const initState: State["guild"] = {
   guilds: [],
   guild: null,
+  error: null,
 };
 
 type Actions =
@@ -17,8 +18,8 @@ type Actions =
       guild: Guild | null;
     }
   | {
-      type: typeof SET_LOADING;
-      loading: boolean;
+      type: typeof GUILD_ERROR;
+      error: string;
     };
 
 export default function guildReducer(state = initState, action: Actions): State["guild"] {
@@ -33,6 +34,12 @@ export default function guildReducer(state = initState, action: Actions): State[
       return {
         ...state,
         guild: action.guild,
+      };
+    }
+    case "GUILD_ERROR": {
+      return {
+        ...state,
+        error: action.error,
       };
     }
     default: {

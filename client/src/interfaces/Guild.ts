@@ -5,8 +5,15 @@ interface Guild {
   avatar: string | null;
   channel_ids: string[];
   category_ids: string[];
+  channels: Channel[] | null;
+  categories: {
+    categoryChannels: Category[];
+    noCategoryChannels: Category[];
+  };
+}
+
+export interface Category extends Channel {
   channels: Channel[];
-  categories: Channel[];
 }
 
 export interface Channel {

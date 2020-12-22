@@ -6,6 +6,8 @@ export interface Channel extends Document {
   nsfw: boolean;
   guild_id: string;
   created_at: number;
+  parent_id?: string;
+  type: number;
 }
 
 const ChannelSchema = new Schema({
@@ -24,6 +26,14 @@ const ChannelSchema = new Schema({
   },
   guild_id: {
     type: String,
+    required: true,
+  },
+  parent_id: {
+    type: String,
+    default: "no_parent",
+  },
+  type: {
+    type: Number,
     required: true,
   },
   created_at: {
