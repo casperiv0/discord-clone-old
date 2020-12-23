@@ -14,11 +14,12 @@ const ChannelSchema = new Schema({
   name: {
     type: String,
     required: true,
-    maxlength: 50,
+    maxlength: 25,
   },
   topic: {
     type: String,
     default: null,
+    maxlength: 1024,
   },
   nsfw: {
     type: Boolean,

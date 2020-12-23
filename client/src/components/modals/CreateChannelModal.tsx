@@ -6,6 +6,7 @@ import { createChannel } from "../../lib/actions/channel";
 import { useParams } from "react-router-dom";
 import { getGuildById } from "../../lib/actions/guild";
 import ErrorMessage from "../error-message";
+import { parseChannelName } from "../../utils/utils";
 
 interface Props {
   error: string | null;
@@ -30,20 +31,9 @@ const CreateChannelModal: FC<Props> = ({ error, createChannel, getGuildById }) =
   }
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
-    let value = e.target.value;
+    const value = e.target.value;
 
-    // 1st replace: replace space with '-'
-    // 2nd replace: replace multiple '-' with 1 '-'
-    // 3rd replace: replace a '-' in the beginning with nothing.
-    // 4th replace: remove special characters
-    // Thanks to: https://youtu.be/3tG1jUQbuSI?t=510
-    value = value
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-")
-      .replace(/^-/, "")
-      .replace(/[!?&²³,;:%£*$^'"()_M+=[\]/]/g, "");
-
-    setName(value);
+    setName(parseChannelName(value));
   }
 
   return (

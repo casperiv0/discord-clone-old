@@ -11,15 +11,23 @@
 
   .guild_channel_item {
     width: 100%;
-    text-decoration: none;
-    color: rgb(202, 202, 202);
-    font-size: 1.1rem;
     padding: 0.5rem 0.8rem;
     border-radius: 0.3rem;
     margin: 0.15rem 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    a {
+      text-decoration: none;
+      color: rgb(202, 202, 202);
+      font-size: 1.1rem;
+    }
+
+    > a {
+      width: 100%;
+      height: 100%;
+    }
 
     &:hover {
       background: #34363c;
@@ -40,15 +48,14 @@
 
     .manage-channel {
       cursor: pointer;
-      height: 0.9rem;
-      width: 0.9rem;
       background: none;
       border: none;
       display: none;
+      width: 0.9rem;
 
       svg {
-        width: 100%;
-        height: 100%;
+        height: 0.9rem;
+        width: 0.9rem;
         fill: $white;
       }
     }

@@ -1,18 +1,39 @@
 @import "_variables.scss";
 
 .btn {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.8rem;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1rem;
   border-radius: 0.2rem;
   border: none;
   background: transparent;
   font-weight: 600;
-  transition: filter 200ms;
+  transition: filter 200ms, background 200ms, color 200ms;
+  text-align: left;
 
   &.blue {
     background-color: $blue;
     color: $white;
+  }
+
+  &.danger {
+    color: $red;
+
+    &:hover {
+      background-color: $red;
+      color: $white;
+    }
+  }
+
+  &.dark {
+    &:hover {
+      background: #34373c;
+      filter: brightness(100%);
+    }
+  }
+
+  &.submit {
+    float: right;
   }
 
   &:hover {

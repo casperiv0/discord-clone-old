@@ -1,4 +1,6 @@
-export default function PlusIcon() {
+import { FC } from "react";
+
+const PlusIcon: FC = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,4 +16,6 @@ export default function PlusIcon() {
       />
     </svg>
   );
-}
+};
+
+export default PlusIcon;

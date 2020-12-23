@@ -1,4 +1,6 @@
-export default function CogIcon() {
+import { FC } from "react";
+
+const CogIcon: FC = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,4 +16,6 @@ export default function CogIcon() {
       />
     </svg>
   );
-}
+};
+
+export default CogIcon;

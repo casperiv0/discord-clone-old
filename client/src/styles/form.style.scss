@@ -22,6 +22,7 @@
     border: 1.5px solid #1a1a1a;
     transition: border 200ms;
     border-radius: 0.2rem;
+    resize: none;
 
     &:hover {
       border-color: #000;
@@ -31,6 +32,11 @@
       outline: none;
       border-color: $blue;
     }
+  }
+
+  textarea {
+    height: 100px;
+    max-width: 100%;
   }
 
   small {

@@ -2,7 +2,7 @@ import { Dispatch } from "react";
 import Guild, { Channel } from "../../interfaces/Guild";
 import Logger from "../../utils/Logger";
 import { closeModal, handleRequest, isSuccess } from "../../utils/utils";
-import { GET_CHANNEL_BY_ID, CREATE_CHANNEL, CHANNEL_ERROR } from "../types";
+import { GET_CHANNEL_BY_ID, CREATE_CHANNEL, CHANNEL_ERROR, UPDATE_CHANNEL_BY_ID } from "../types";
 
 interface IDispatch {
   type: string;
@@ -74,5 +74,28 @@ export const createChannel = (name: string, guildId: string) => async (
     }
   } catch (e) {
     Logger.error(CREATE_CHANNEL, e);
+  }
+};
+
+export const updateChannel = (channelId: string, guildId: string, data: unknown) => async (
+  dispatch: Dispatch<IDispatch>
+): Promise<void> => {
+  try {
+    const res = await handleRequest(`/channels/${channelId}?guild_id=${guildId}`, "PUT", data);
+
+    if (isSuccess(res)) {
+      dispatch({
+        type: "",
+      });
+
+      Logger.log(UPDATE_CHANNEL_BY_ID, `Successfully updated channel with id: ${channelId}`);
+    } else {
+      dispatch({
+        type: CHANNEL_ERROR,
+        error: res.data.error,
+      });
+    }
+  } catch (e) {
+    console.error(e);
   }
 };

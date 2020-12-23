@@ -1,4 +1,6 @@
-export default function XIcon() {
+import { FC } from "react";
+
+const XIcon: FC = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,4 +16,5 @@ export default function XIcon() {
       />
     </svg>
   );
-}
+};
+export default XIcon;

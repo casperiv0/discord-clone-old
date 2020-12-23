@@ -7,6 +7,7 @@ import store from "./lib/store";
 const LoginPage = lazy(() => import("./pages/auth/login"));
 const RegisterPage = lazy(() => import("./pages/auth/register"));
 const GuildPage = lazy(() => import("./pages/guild"));
+const ChannelSettingsPage = lazy(() => import("./pages/channel-settings"));
 
 const App: FC = () => {
   return (
@@ -17,6 +18,10 @@ const App: FC = () => {
             <Route path="/login" exact component={LoginPage} />
             <Route path="/register" exact component={RegisterPage} />
 
+            <AuthRoute
+              path="/channels/:guild_id/:channel_id/settings"
+              component={ChannelSettingsPage}
+            />
             <AuthRoute path="/channels/:guild_id/:channel_id" component={GuildPage} />
           </Switch>
         </Provider>

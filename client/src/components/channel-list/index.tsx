@@ -24,17 +24,18 @@ const GuildChannelList: FC<Props> = ({ guild }) => {
               const isActive = params?.channel_id === channel?._id;
 
               return (
-                <Link
+                <div
                   className={`guild_channel_item ${isActive ? "active" : ""}`}
-                  to={`/channels/${guild?._id}/${channel?._id}`}
                   key={channel?._id}
                 >
-                  {channel?.name}
-
-                  <button className="manage-channel">
+                  <Link to={`/channels/${guild?._id}/${channel?._id}`}>{channel?.name}</Link>
+                  <Link
+                    to={`/channels/${guild?._id}/${channel?._id}/settings`}
+                    className="manage-channel"
+                  >
                     <CogIcon />
-                  </button>
-                </Link>
+                  </Link>
+                </div>
               );
             })}
           </div>
@@ -43,21 +44,22 @@ const GuildChannelList: FC<Props> = ({ guild }) => {
       {guild?.categories?.categoryChannels?.map((category: Category) => {
         return (
           <div key={category?._id} className="category">
-            <CategoryTitle name={category?.name} />
+            <CategoryTitle name={category?.name} categoryId={category?._id} />
             {category.channels.map((channel: Channel) => {
               const isActive = params?.channel_id === channel?._id;
               return (
-                <Link
+                <div
                   className={`guild_channel_item ${isActive ? "active" : ""}`}
-                  to={`/channels/${guild?._id}/${channel?._id}`}
                   key={channel?._id}
                 >
-                  {channel?.name}
-
-                  <button className="manage-channel">
+                  <Link to={`/channels/${guild?._id}/${channel?._id}`}>{channel?.name}</Link>
+                  <Link
+                    to={`/channels/${guild?._id}/${channel?._id}/settings`}
+                    className="manage-channel"
+                  >
                     <CogIcon />
-                  </button>
-                </Link>
+                  </Link>
+                </div>
               );
             })}
           </div>
@@ -67,12 +69,16 @@ const GuildChannelList: FC<Props> = ({ guild }) => {
   );
 };
 
-const CategoryTitle: FC<{ name: string }> = ({ name }) => {
+const CategoryTitle: FC<{ name: string; categoryId: string }> = ({ categoryId, name }) => {
+  function createChannel() {
+    openModal("create-channel-modal", { category_id: categoryId });
+  }
+
   return (
     <div className="category_title">
       <h3>{name}</h3>
 
-      <button onClick={() => openModal("create-channel-modal")}>
+      <button onClick={createChannel}>
         <PlusIcon />
       </button>
     </div>
