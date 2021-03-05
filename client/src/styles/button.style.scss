@@ -11,6 +11,10 @@
   transition: filter 200ms, background 200ms, color 200ms;
   text-align: left;
 
+  &.auth {
+    text-align: center;
+  }
+
   &.blue {
     background-color: $blue;
     color: $white;

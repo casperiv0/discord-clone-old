@@ -1,11 +1,12 @@
 import { Dispatch } from "react";
+import User from "../../interfaces/User";
 import { handleRequest, isSuccess } from "../../utils/utils";
 import { AUTHENTICATE, AUTH_ERROR, SET_LOADING } from "../types";
 
 interface IDispatch {
   type: string;
   error?: string;
-  user_id?: string;
+  user?: User;
   loading?: boolean;
   isAuth?: boolean;
 }
@@ -21,7 +22,7 @@ export const login = (data: unknown) => async (
     if (isSuccess(res)) {
       dispatch({
         type: AUTHENTICATE,
-        user_id: res.data.user_id,
+        user: res.data.user,
       });
 
       return (window.location.href = "/");
@@ -46,7 +47,7 @@ export const register = (data: unknown) => async (
     if (isSuccess(res)) {
       dispatch({
         type: AUTHENTICATE,
-        user_id: res.data.user_id,
+        user: res.data.user,
       });
 
       return (window.location.href = "/");
@@ -60,7 +61,9 @@ export const register = (data: unknown) => async (
   dispatch({ type: SET_LOADING, loading: false });
 };
 
-export const checkAuth = () => async (dispatch: Dispatch<IDispatch>): Promise<void | string> => {
+export const checkAuth = () => async (
+  dispatch: Dispatch<IDispatch>
+): Promise<void | string> => {
   dispatch({ type: SET_LOADING, loading: true });
 
   try {
@@ -69,7 +72,7 @@ export const checkAuth = () => async (dispatch: Dispatch<IDispatch>): Promise<vo
     if (isSuccess(res)) {
       dispatch({
         type: AUTHENTICATE,
-        user_id: res.data.user_id,
+        user: res.data.user,
         isAuth: true,
       });
     } else {

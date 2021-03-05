@@ -6,25 +6,35 @@ import { createCategory } from "../../lib/actions/channel";
 import { getGuildById } from "../../lib/actions/guild";
 import { useParams } from "react-router-dom";
 import ErrorMessage from "../error-message";
+import Loader from "../loader";
 
 interface Props {
   error: string | null;
-  createCategory: (name: string, guildId: string) => void;
+  createCategory: (name: string, guildId: string) => Promise<boolean>;
   getGuildById: (id: string) => void;
 }
 
-const CreateCategoryModal: FC<Props> = ({ error, createCategory, getGuildById }) => {
+const CreateCategoryModal: FC<Props> = ({
+  error,
+  createCategory,
+  getGuildById,
+}) => {
   const [name, setName] = useState<string>("");
+  const [state, setState] = useState<string | null>(null);
   const params = useParams<{ guild_id: string }>();
 
-  function onSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent) {
+    setState("loading");
     e.preventDefault();
 
-    createCategory(name, params.guild_id);
+    const created = await createCategory(name, params.guild_id);
 
-    setTimeout(() => {
+    if (created === true) {
       getGuildById(params.guild_id);
-    }, 500);
+      setState(null);
+    } else {
+      setState("error");
+    }
   }
 
   return (
@@ -45,8 +55,12 @@ const CreateCategoryModal: FC<Props> = ({ error, createCategory, getGuildById })
         </form>
       </div>
       <div className="modal_footer">
-        <button form="create_category_form" className="btn blue">
-          Create Category
+        <button
+          disabled={state === "loading"}
+          form="create_category_form"
+          className="btn blue"
+        >
+          {state === "loading" ? <Loader /> : " Create Category"}
         </button>
       </div>
     </Modal>
@@ -57,4 +71,6 @@ const mapToProps = (state: State) => ({
   error: state.channel.error,
 });
 
-export default connect(mapToProps, { createCategory, getGuildById })(CreateCategoryModal);
+export default connect(mapToProps, { createCategory, getGuildById })(
+  CreateCategoryModal
+);

@@ -1,9 +1,10 @@
 import { Router, Response } from "express";
 import { compareSync, hashSync } from "bcryptjs";
-import { errorObj } from "../utils/utils";
+import { createDiscriminator, errorObj } from "../utils/utils";
 import UserModel from "../models/User.model";
 import IRequest from "../interfaces/IRequest";
 import { useAuth, useToken } from "../hooks";
+import logger from "../utils/logger";
 const router = Router();
 
 const cookieExpiresIn = 60 * 60 * 1000 * 24 * 7; /* 1week */
@@ -66,7 +67,14 @@ router.post("/register", async (req: IRequest, res: Response) => {
   }
 
   const hash = hashSync(password, 15);
-  const newUser = new UserModel({ email, username, password: hash });
+  const discriminator = createDiscriminator();
+
+  const newUser = await UserModel.create({
+    password: hash,
+    username,
+    email,
+    discriminator,
+  });
 
   try {
     await newUser.save();
@@ -85,7 +93,31 @@ router.post("/register", async (req: IRequest, res: Response) => {
 });
 
 router.post("/user", useAuth, async (req: IRequest, res: Response) => {
-  return res.json({ status: "success", user_id: req.user?._id });
+  const user = await UserModel.findById(req.user?._id, { username: 1, _id: 1 });
+
+  return res.json({ status: "success", user: user });
+});
+
+router.delete("/", useAuth, async (req: IRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.json(errorObj("You need to authenticated!"));
+    }
+
+    await UserModel.findByIdAndDelete(req.user?._id);
+
+    res.clearCookie("session", {
+      httpOnly: true,
+    });
+
+    return res.json({
+      status: "success",
+      msg: "Successfully deleted your account",
+    });
+  } catch (e) {
+    logger.error("DELETE_ACCOUNT", e);
+    return res.json(errorObj("An unexpected error occurred"));
+  }
 });
 
 export default router;

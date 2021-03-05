@@ -1,9 +1,10 @@
 import axios, { AxiosPromise, AxiosResponse } from "axios";
 import Guild, { Channel } from "../interfaces/Guild";
+import User from "../interfaces/User";
 
 type AllowedMethods = "GET" | "POST" | "PUT" | "DELETE";
 
-const url = process.env.REACT_APP_API_URL + "/api";
+const url = process.env.REACT_APP_API_URL + "/api/v1";
 
 export function handleRequest(
   path: string,
@@ -12,10 +13,11 @@ export function handleRequest(
 ): AxiosPromise<{
   status: "error" | "success";
   error: string;
-  user_id: string;
+  user: User;
   guilds: Guild[];
   guild: Guild;
   channel: Channel;
+  guild_id: string;
   [key: string]: unknown;
 }> {
   return axios({
@@ -26,7 +28,9 @@ export function handleRequest(
   });
 }
 
-export function isSuccess(res: AxiosResponse<{ status: "error" | "success" }>): boolean {
+export function isSuccess(
+  res: AxiosResponse<{ status: "error" | "success" }>
+): boolean {
   return res.data.status && res.data.status === "success";
 }
 

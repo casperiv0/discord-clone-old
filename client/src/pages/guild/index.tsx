@@ -18,7 +18,11 @@ interface Props {
   getChannelById: (channelId: string, guildId: string) => void;
 }
 
-const GuildPage: FC<Props> = ({ getUserGuilds, getGuildById, getChannelById }) => {
+const GuildPage: FC<Props> = ({
+  getUserGuilds,
+  getGuildById,
+  getChannelById,
+}) => {
   const match = useParams<{ channel_id: string; guild_id: string }>();
 
   useEffect(() => {
@@ -43,4 +47,6 @@ const GuildPage: FC<Props> = ({ getUserGuilds, getGuildById, getChannelById }) =
   );
 };
 
-export default connect(null, { getUserGuilds, getGuildById, getChannelById })(GuildPage);
+export default connect(null, { getUserGuilds, getGuildById, getChannelById })(
+  GuildPage
+);

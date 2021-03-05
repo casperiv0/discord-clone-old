@@ -6,6 +6,10 @@ export interface User extends Document {
   email: string;
   avatar_id: string;
   created_at: number;
+
+  /**
+   * An array of guild Id's
+   */
   guilds: string[];
 }
 
@@ -32,6 +36,10 @@ const UserSchema = new Schema({
   avatar_id: {
     type: String,
     default: "default",
+  },
+  discriminator: {
+    type: String,
+    required: true,
   },
   created_at: {
     type: Number,

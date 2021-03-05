@@ -52,7 +52,7 @@ const LoginPage: FC<Props> = ({ login, error, loading }) => {
           />
         </div>
         <div className="form_group">
-          <button className="btn blue" type="submit">
+          <button className="btn blue auth" type="submit">
             {loading ? <Loader /> : "Login"}
           </button>
           <small>

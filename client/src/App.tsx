@@ -22,7 +22,10 @@ const App: FC = () => {
               path="/channels/:guild_id/:channel_id/settings"
               component={ChannelSettingsPage}
             />
-            <AuthRoute path="/channels/:guild_id/:channel_id" component={GuildPage} />
+            <AuthRoute
+              path="/channels/:guild_id/:channel_id"
+              component={GuildPage}
+            />
           </Switch>
         </Provider>
       </Suspense>

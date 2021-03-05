@@ -175,7 +175,7 @@ router.delete("/:channel_id", useAuth, async (req: IRequest, res: Response) => {
     }
     case 2: {
       if (!guild?.category_ids.includes(channel_id)) {
-        return res.json(errorObj("Channel does not exist in this guild"));
+        return res.json(errorObj("Category does not exist in this guild"));
       }
       break;
     }

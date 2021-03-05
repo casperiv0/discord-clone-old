@@ -82,6 +82,7 @@
       width: 100%;
       display: flex;
       justify-content: center;
+      transition: opacity 200ms, transform 200ms;
 
       .dropdown_content {
         border-radius: 0.3rem;
@@ -109,13 +110,22 @@
           color: $white;
           background: $blue;
         }
+
+        &.danger:hover {
+          background: $red;
+        }
       }
 
       &.active {
         opacity: 1;
         transform: scale(1);
         pointer-events: all;
-        transition: opacity 200ms, transform 200ms;
+      }
+
+      &.closed {
+        opacity: 0;
+        transform: scale(0);
+        pointer-events: all;
       }
     }
   }

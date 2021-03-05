@@ -17,30 +17,34 @@ const GuildChannelList: FC<Props> = ({ guild }) => {
 
   return (
     <div className="guild_channels_list">
-      {guild?.categories?.noCategoryChannels?.map((category: Category, idx: number) => {
-        return (
-          <div key={idx} className="category">
-            {category.channels.map((channel: Channel) => {
-              const isActive = params?.channel_id === channel?._id;
+      {guild?.categories?.noCategoryChannels?.map(
+        (category: Category, idx: number) => {
+          return (
+            <div key={idx} className="category">
+              {category.channels.map((channel: Channel) => {
+                const isActive = params?.channel_id === channel?._id;
 
-              return (
-                <div
-                  className={`guild_channel_item ${isActive ? "active" : ""}`}
-                  key={channel?._id}
-                >
-                  <Link to={`/channels/${guild?._id}/${channel?._id}`}>{channel?.name}</Link>
-                  <Link
-                    to={`/channels/${guild?._id}/${channel?._id}/settings`}
-                    className="manage-channel"
+                return (
+                  <div
+                    className={`guild_channel_item ${isActive ? "active" : ""}`}
+                    key={channel?._id}
                   >
-                    <CogIcon />
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
-        );
-      })}
+                    <Link to={`/channels/${guild?._id}/${channel?._id}`}>
+                      {channel?.name}
+                    </Link>
+                    <Link
+                      to={`/channels/${guild?._id}/${channel?._id}/settings`}
+                      className="manage-channel"
+                    >
+                      <CogIcon />
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        }
+      )}
       {guild?.categories?.categoryChannels?.map((category: Category) => {
         return (
           <div key={category?._id} className="category">
@@ -52,7 +56,9 @@ const GuildChannelList: FC<Props> = ({ guild }) => {
                   className={`guild_channel_item ${isActive ? "active" : ""}`}
                   key={channel?._id}
                 >
-                  <Link to={`/channels/${guild?._id}/${channel?._id}`}>{channel?.name}</Link>
+                  <Link to={`/channels/${guild?._id}/${channel?._id}`}>
+                    {channel?.name}
+                  </Link>
                   <Link
                     to={`/channels/${guild?._id}/${channel?._id}/settings`}
                     className="manage-channel"
@@ -69,7 +75,10 @@ const GuildChannelList: FC<Props> = ({ guild }) => {
   );
 };
 
-const CategoryTitle: FC<{ name: string; categoryId: string }> = ({ categoryId, name }) => {
+const CategoryTitle: FC<{ name: string; categoryId: string }> = ({
+  categoryId,
+  name,
+}) => {
   function createChannel() {
     openModal("create-channel-modal", { category_id: categoryId });
   }

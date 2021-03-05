@@ -14,6 +14,6 @@ app.use(cookieParser());
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(json());
 app.use(morgan("dev"));
-app.use("/api", api);
+app.use("/api/v1", api);
 
 app.listen(port, () => Logger.log("APP", `App is running at: http://localhost:${port}`));

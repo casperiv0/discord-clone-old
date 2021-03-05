@@ -13,7 +13,12 @@ interface Props {
   path: string;
 }
 
-const AuthRoute: FC<Props> = ({ path, component: Component, loading, checkAuth }) => {
+const AuthRoute: FC<Props> = ({
+  path,
+  component: Component,
+  loading,
+  checkAuth,
+}) => {
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
@@ -21,7 +26,11 @@ const AuthRoute: FC<Props> = ({ path, component: Component, loading, checkAuth }
   if (loading) return <Loader color="#7289DA" size={15} fullScreen />;
 
   return (
-    <Route path={path} exact render={(props: RouteChildrenProps) => <Component {...props} />} />
+    <Route
+      path={path}
+      exact
+      render={(props: RouteChildrenProps) => <Component {...props} />}
+    />
   );
 };
 

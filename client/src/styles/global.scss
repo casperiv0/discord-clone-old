@@ -24,3 +24,7 @@ body {
   grid-template-columns: 70px 250px auto 250px;
   height: 100vh;
 }
+
+button:disabled {
+  cursor: not-allowed;
+}

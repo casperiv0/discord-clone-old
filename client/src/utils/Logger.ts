@@ -9,7 +9,9 @@ class Logger {
 
   log(type: string, message: string): void {
     return console.log(
-      `${chalk.blueBright("[INFO]")}[${type.toUpperCase()}][${this.now}]: ${message}`
+      `${chalk.blueBright("[INFO]")}[${type.toUpperCase()}][${
+        this.now
+      }]: ${message}`
     );
   }
 

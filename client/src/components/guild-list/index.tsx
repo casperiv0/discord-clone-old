@@ -15,9 +15,10 @@ const GuildList: FC<Props> = ({ guilds }) => {
 
   return (
     <div className="guild_list">
-      <Link to="/channels/@me" className="guild_list_item">
+      {/* <Link to="/channels/@me" className="guild_list_item">
         ME
-      </Link>
+      </Link> */}
+      <div className="guild_list_item">ME</div>
       <span className="divider"></span>
       {guilds.map((guild: Guild) => {
         const isActive = match?.guild_id === guild?._id;

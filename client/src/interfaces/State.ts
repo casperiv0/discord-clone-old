@@ -1,10 +1,11 @@
 import Guild, { Channel } from "./Guild";
+import User from "./User";
 
 interface State {
   auth: {
     isAuth: boolean;
     loading: boolean;
-    user_id: string | null;
+    user: User | null;
     error: string | null;
   };
   guild: {

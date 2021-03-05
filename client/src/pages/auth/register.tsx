@@ -72,7 +72,7 @@ const RegisterPage: FC<Props> = ({ error, loading, register }) => {
           />
         </div>
         <div className="form_group">
-          <button className="btn blue" type="submit">
+          <button className="btn blue auth" type="submit">
             {loading ? <Loader /> : "Continue"}
           </button>
           <small>

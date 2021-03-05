@@ -22,7 +22,10 @@ type Actions =
       error: string;
     };
 
-export default function guildReducer(state = initState, action: Actions): State["guild"] {
+export default function guildReducer(
+  state = initState,
+  action: Actions
+): State["guild"] {
   switch (action.type) {
     case "GET_USER_GUILDS": {
       return {
