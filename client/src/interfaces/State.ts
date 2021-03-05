@@ -1,4 +1,5 @@
 import Guild, { Channel } from "./Guild";
+import Message from "./Message";
 import User from "./User";
 
 interface State {
@@ -16,6 +17,10 @@ interface State {
   channel: {
     channel: Channel | null;
     error: string | null;
+  };
+  message: {
+    messages: Message[];
+    loading: boolean;
   };
 }
 

@@ -18,7 +18,7 @@ export function handleRequest(
   guild: Guild;
   channel: Channel;
   guild_id: string;
-  [key: string]: unknown;
+  [key: string]: any;
 }> {
   return axios({
     url: `${url}${path}`,

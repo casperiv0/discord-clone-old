@@ -4,4 +4,69 @@
   grid-area: messages;
   min-width: 400px;
   background: #36393f;
+
+  position: relative;
+
+  .messages {
+    padding-top: 3rem;
+    overflow-y: auto;
+    width: 100%;
+    height: 95%;
+    position: absolute;
+    bottom: 6rem;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.message-item {
+  width: 100%;
+  display: flex;
+  padding: 0.4rem 1rem;
+  margin: 0.2rem 0;
+  transition: background 150ms;
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    object-fit: cover;
+
+    & img {
+      border-radius: 100%;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .content {
+    margin-left: 0.5rem;
+
+    header {
+      font-size: 1rem;
+      font-weight: 600;
+      color: $light-gray;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    div {
+      color: $white;
+    }
+  }
+
+  &:hover {
+    background: $dark-gray;
+  }
+}
+
+.loading-center {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
