@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prettier:fix": "prettier --write ."
+    "prettier:fix": "prettier --write .",
+    "client": "npm run dev --prefix client",
+    "server": "npm run dev --prefix server",
+    "dev": "concurrently 'npm run client' 'npm run server'"
   },
   "repository": {
     "type": "git",
@@ -15,7 +18,9 @@
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
     "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
@@ -27,5 +32,8 @@
   "bugs": {
     "url": "https://github.com/Dev-CasperTheGhost/discord-clone/issues"
   },
-  "homepage": "https://github.com/Dev-CasperTheGhost/discord-clone#readme"
+  "homepage": "https://github.com/Dev-CasperTheGhost/discord-clone#readme",
+  "dependencies": {
+    "concurrently": "^6.0.0"
+  }
 }

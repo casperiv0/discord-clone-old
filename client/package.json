@@ -45,6 +45,7 @@
     "@types/chalk": "^2.2.0",
     "@types/dateformat": "^3.0.1",
     "@types/react-redux": "^7.1.16",
-    "@types/react-router-dom": "^5.1.7"
+    "@types/react-router-dom": "^5.1.7",
+    "eslint-config-prettier": "^8.1.0"
   }
 }
