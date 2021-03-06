@@ -1,4 +1,3 @@
-import { FC } from "react";
 import { connect } from "react-redux";
 import { Channel } from "../../interfaces/Guild";
 import State from "../../interfaces/State";
@@ -8,7 +7,7 @@ interface Props {
   channel: Channel | null;
 }
 
-const TopicModal: FC<Props> = ({ channel }) => {
+const TopicModal: React.FC<Props> = ({ channel }) => {
   return (
     <Modal title={`#${channel?.name}`} id="topic-modal">
       <div className="modal_body">{channel?.topic}</div>

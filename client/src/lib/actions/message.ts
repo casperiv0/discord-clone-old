@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CREATE_MESSAGE, GET_MESSAGES_FOR_CHANNEL, SET_FETCHING_MSGS } from "../types";
+import { CREATE_MESSAGE, DELETE_MESSAGE_BY_ID, GET_MESSAGES_FOR_CHANNEL, SET_FETCHING_MSGS } from "../types";
 import Message from "../../interfaces/Message";
 import Logger from "../../utils/Logger";
 import { handleRequest, isSuccess } from "../../utils/utils";
@@ -50,6 +50,26 @@ export const createMessage = (message: string, guildId: string, channelId: strin
     }
   } catch (e) {
     Logger.error("CREATE_MESSAGE", e);
+    return false;
+  }
+};
+
+export const deleteMessageById = (messageId: string, channelId: string, guildId: string) => async (
+  dispatch: React.Dispatch<IDispatch>,
+): Promise<boolean> => {
+  try {
+    const res = await handleRequest(`/message/${guildId}/${channelId}/${messageId}`, "DELETE");
+
+    if (isSuccess(res)) {
+      dispatch({
+        type: DELETE_MESSAGE_BY_ID,
+      });
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    Logger.error(DELETE_MESSAGE_BY_ID, e);
     return false;
   }
 };

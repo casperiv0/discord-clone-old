@@ -1,6 +1,4 @@
-import { FC } from "react";
-
-const XIcon: FC = () => {
+const XIcon: React.FC = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

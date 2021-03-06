@@ -4,6 +4,7 @@ import { useAuth } from "../hooks";
 import IRequest from "../interfaces/IRequest";
 import ChannelModel from "../models/Channel.model";
 import GuildModel from "../models/Guild.model";
+import MessageModel from "../models/Message.model";
 import UserModel from "../models/User.model";
 import logger from "../utils/logger";
 import { errorObj } from "../utils/utils";
@@ -76,7 +77,7 @@ router.get("/:channel_id", useAuth, async (req: IRequest, res: Response) => {
     return res.json(errorObj("You must provide a guild_id"));
   }
 
-  const user = await UserModel.findById(req.user?._id);
+  const user = await UserModel.findById(req.user);
   if (!user) {
     return res.json(errorObj("User was not found"));
   }
@@ -119,7 +120,7 @@ router.put("/:channel_id", useAuth, async (req: IRequest, res: Response) => {
     return res.json(errorObj("You must provide a `guild_id`"));
   }
 
-  const user = await UserModel.findById(req.user?._id);
+  const user = await UserModel.findById(req.user);
   const channel = await ChannelModel.findById(channel_id);
 
   if (!user) {
@@ -155,7 +156,7 @@ router.delete("/:channel_id", useAuth, async (req: IRequest, res: Response) => {
   }
 
   const guild = await GuildModel.findById(guild_id);
-  const user = await UserModel.findById(req.user?._id);
+  const user = await UserModel.findById(req.user);
   const channel = await ChannelModel.findById(channel_id);
 
   if (!user) {
@@ -185,6 +186,7 @@ router.delete("/:channel_id", useAuth, async (req: IRequest, res: Response) => {
   }
 
   try {
+    await MessageModel.deleteMany({ guild_id: guild._id, channel_id: channel._id });
     await ChannelModel.findByIdAndDelete(channel?._id);
 
     if (channel?.type === 1) {

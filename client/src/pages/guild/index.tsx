@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import * as React from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
 import GuildChannelList from "../../components/channel-list";
@@ -18,10 +18,10 @@ interface Props {
   getChannelById: (channelId: string, guildId: string) => void;
 }
 
-const GuildPage: FC<Props> = ({ getUserGuilds, getGuildById, getChannelById }) => {
+const GuildPage: React.FC<Props> = ({ getUserGuilds, getGuildById, getChannelById }) => {
   const match = useParams<{ channel_id: string; guild_id: string }>();
 
-  useEffect(() => {
+  React.useEffect(() => {
     getUserGuilds();
     getGuildById(match.guild_id);
     getChannelById(match.channel_id, match.guild_id);

@@ -1,4 +1,4 @@
-import { FC, FormEvent, useEffect, useState } from "react";
+import * as React from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router";
 import State from "../../interfaces/State";
@@ -15,16 +15,16 @@ interface Props {
   createGuild: (data: unknown) => Promise<string | undefined>;
 }
 
-const CreateGuildModal: FC<Props> = ({ user, error, createGuild }) => {
-  const [state, setState] = useState<string | null>(null);
-  const [name, setName] = useState(`${user?.username}'s Server` || "");
+const CreateGuildModal: React.FC<Props> = ({ user, error, createGuild }) => {
+  const [state, setState] = React.useState<string | null>(null);
+  const [name, setName] = React.useState(`${user?.username}'s Server` || "");
   const history = useHistory();
 
-  useEffect(() => {
+  React.useEffect(() => {
     setName(`${user?.username}'s Server` || "");
   }, [user?.username]);
 
-  async function onSubmit(e: FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setState("loading");
 

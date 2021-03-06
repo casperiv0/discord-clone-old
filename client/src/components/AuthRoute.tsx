@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import * as React from "react";
 import { connect } from "react-redux";
 import { Route, RouteChildrenProps } from "react-router-dom";
 import State from "../interfaces/State";
@@ -13,8 +13,8 @@ interface Props {
   path: string;
 }
 
-const AuthRoute: FC<Props> = ({ path, component: Component, loading, checkAuth }) => {
-  useEffect(() => {
+const AuthRoute: React.FC<Props> = ({ path, component: Component, loading, checkAuth }) => {
+  React.useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 

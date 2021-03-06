@@ -1,8 +1,8 @@
-import { Dispatch } from "react";
+import * as React from "react";
 import Guild, { Channel } from "../../interfaces/Guild";
 import Logger from "../../utils/Logger";
 import { closeModal, handleRequest, isSuccess } from "../../utils/utils";
-import { GET_CHANNEL_BY_ID, CREATE_CHANNEL, CHANNEL_ERROR, UPDATE_CHANNEL_BY_ID } from "../types";
+import { GET_CHANNEL_BY_ID, CREATE_CHANNEL, CHANNEL_ERROR, UPDATE_CHANNEL_BY_ID, DELETE_CHANNEL_BY_ID } from "../types";
 
 interface IDispatch {
   type: string;
@@ -13,7 +13,7 @@ interface IDispatch {
 }
 
 export const getChannelById = (channelId: string, guildId: string) => async (
-  dispatch: Dispatch<IDispatch>,
+  dispatch: React.Dispatch<IDispatch>,
 ): Promise<void | string> => {
   try {
     const res = await handleRequest(`/channels/${channelId}?guild_id=${guildId}`, "GET");
@@ -31,7 +31,7 @@ export const getChannelById = (channelId: string, guildId: string) => async (
 };
 
 export const createCategory = (name: string, guildId: string) => async (
-  dispatch: Dispatch<IDispatch>,
+  dispatch: React.Dispatch<IDispatch>,
 ): Promise<boolean> => {
   try {
     const res = await handleRequest(`/channels?guild_id=${guildId}&type=2`, "POST", { name });
@@ -58,7 +58,7 @@ export const createCategory = (name: string, guildId: string) => async (
 };
 
 export const createChannel = (name: string, guildId: string) => async (
-  dispatch: Dispatch<IDispatch>,
+  dispatch: React.Dispatch<IDispatch>,
 ): Promise<void> => {
   try {
     const res = await handleRequest(`/channels?guild_id=${guildId}&type=1`, "POST", {
@@ -83,7 +83,7 @@ export const createChannel = (name: string, guildId: string) => async (
 };
 
 export const updateChannel = (channelId: string, guildId: string, data: unknown) => async (
-  dispatch: Dispatch<IDispatch>,
+  dispatch: React.Dispatch<IDispatch>,
 ): Promise<void> => {
   try {
     const res = await handleRequest(`/channels/${channelId}?guild_id=${guildId}`, "PUT", data);
@@ -102,5 +102,26 @@ export const updateChannel = (channelId: string, guildId: string, data: unknown)
     }
   } catch (e) {
     console.error(e);
+  }
+};
+
+export const deleteChannelById = (channelId: string, guildId: string) => async (
+  dispatch: React.Dispatch<IDispatch>,
+): Promise<boolean> => {
+  try {
+    const res = await handleRequest(`/channels/${channelId}?guild_id=${guildId}`, "DELETE");
+
+    if (isSuccess(res)) {
+      dispatch({
+        type: DELETE_CHANNEL_BY_ID,
+      });
+
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    Logger.error(DELETE_CHANNEL_BY_ID, e);
+    return false;
   }
 };

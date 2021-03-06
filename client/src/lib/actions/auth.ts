@@ -1,4 +1,4 @@
-import { Dispatch } from "react";
+import * as React from "react";
 import User from "../../interfaces/User";
 import { handleRequest, isSuccess } from "../../utils/utils";
 import { AUTHENTICATE, AUTH_ERROR, SET_LOADING } from "../types";
@@ -11,7 +11,7 @@ interface IDispatch {
   isAuth?: boolean;
 }
 
-export const login = (data: unknown) => async (dispatch: Dispatch<IDispatch>): Promise<void | string> => {
+export const login = (data: unknown) => async (dispatch: React.Dispatch<IDispatch>): Promise<void | string> => {
   dispatch({ type: SET_LOADING, loading: true });
 
   try {
@@ -34,7 +34,7 @@ export const login = (data: unknown) => async (dispatch: Dispatch<IDispatch>): P
   dispatch({ type: SET_LOADING, loading: false });
 };
 
-export const register = (data: unknown) => async (dispatch: Dispatch<IDispatch>): Promise<void | string> => {
+export const register = (data: unknown) => async (dispatch: React.Dispatch<IDispatch>): Promise<void | string> => {
   dispatch({ type: SET_LOADING, loading: true });
 
   try {
@@ -57,7 +57,7 @@ export const register = (data: unknown) => async (dispatch: Dispatch<IDispatch>)
   dispatch({ type: SET_LOADING, loading: false });
 };
 
-export const checkAuth = () => async (dispatch: Dispatch<IDispatch>): Promise<void | string> => {
+export const checkAuth = () => async (dispatch: React.Dispatch<IDispatch>): Promise<void | string> => {
   dispatch({ type: SET_LOADING, loading: true });
 
   try {

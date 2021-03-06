@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FormEvent, useState } from "react";
+import * as React from "react";
 import { connect } from "react-redux";
 import State from "../../interfaces/State";
 import Modal from "./index";
@@ -14,11 +14,11 @@ interface Props {
   getGuildById: (id: string) => void;
 }
 
-const CreateChannelModal: FC<Props> = ({ error, createChannel, getGuildById }) => {
-  const [chName, setName] = useState<string>("");
+const CreateChannelModal: React.FC<Props> = ({ error, createChannel, getGuildById }) => {
+  const [chName, setName] = React.useState<string>("");
   const params = useParams<{ guild_id: string }>();
 
-  async function onSubmit(e: FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     createChannel(chName, params.guild_id);
@@ -30,7 +30,7 @@ const CreateChannelModal: FC<Props> = ({ error, createChannel, getGuildById }) =
     }, 500);
   }
 
-  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
 
     setName(parseChannelName(value));

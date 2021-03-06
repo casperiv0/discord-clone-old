@@ -93,7 +93,7 @@ router.post("/register", async (req: IRequest, res: Response) => {
 });
 
 router.post("/user", useAuth, async (req: IRequest, res: Response) => {
-  const user = await UserModel.findById(req.user?._id, { username: 1, _id: 1 });
+  const user = await UserModel.findById(req.user, { username: 1, _id: 1, discriminator: 1 });
 
   return res.json({ status: "success", user: user });
 });
@@ -104,7 +104,7 @@ router.delete("/", useAuth, async (req: IRequest, res: Response) => {
       return res.json(errorObj("You need to authenticated!"));
     }
 
-    await UserModel.findByIdAndDelete(req.user?._id);
+    await UserModel.findByIdAndDelete(req.user);
 
     res.clearCookie("session", {
       httpOnly: true,

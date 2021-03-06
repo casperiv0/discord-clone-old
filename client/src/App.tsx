@@ -1,19 +1,19 @@
-import { FC, lazy, Suspense } from "react";
+import * as React from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import AuthRoute from "./components/AuthRoute";
 import store from "./lib/store";
 import "./lib/socket";
 
-const LoginPage = lazy(() => import("./pages/auth/login"));
-const RegisterPage = lazy(() => import("./pages/auth/register"));
-const GuildPage = lazy(() => import("./pages/guild"));
-const ChannelSettingsPage = lazy(() => import("./pages/channel-settings"));
+const LoginPage = React.lazy(() => import("./pages/auth/login"));
+const RegisterPage = React.lazy(() => import("./pages/auth/register"));
+const GuildPage = React.lazy(() => import("./pages/guild"));
+const ChannelSettingsPage = React.lazy(() => import("./pages/channel-settings"));
 
-const App: FC = () => {
+const App: React.FC = () => {
   return (
     <Router>
-      <Suspense fallback={<p>Loading...</p>}>
+      <React.Suspense fallback={<p>Loading...</p>}>
         <Provider store={store}>
           <Switch>
             <Route path="/login" exact component={LoginPage} />
@@ -23,7 +23,7 @@ const App: FC = () => {
             <AuthRoute path="/channels/:guild_id/:channel_id" component={GuildPage} />
           </Switch>
         </Provider>
-      </Suspense>
+      </React.Suspense>
     </Router>
   );
 };

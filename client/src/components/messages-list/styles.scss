@@ -4,14 +4,13 @@
   grid-area: messages;
   min-width: 400px;
   background: #36393f;
-
   position: relative;
 
   .messages {
+    max-height: 95%;
     padding-top: 3rem;
     overflow-y: auto;
     width: 100%;
-    height: 95%;
     position: absolute;
     bottom: 6rem;
     display: flex;
@@ -25,12 +24,17 @@
   padding: 0.4rem 1rem;
   margin: 0.2rem 0;
   transition: background 150ms;
+  position: relative;
 
   .avatar {
     width: 40px;
+    min-width: 40px;
     height: 40px;
     border-radius: 100%;
     object-fit: cover;
+    border: none;
+    background: none;
+    cursor: pointer;
 
     & img {
       border-radius: 100%;
@@ -43,6 +47,7 @@
     margin-left: 0.5rem;
 
     header {
+      width: max-content;
       font-size: 1rem;
       font-weight: 600;
       color: $light-gray;
@@ -55,11 +60,51 @@
 
     div {
       color: $white;
+      word-break: break-all;
+    }
+  }
+
+  .message-actions {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    right: 1rem;
+    top: -1rem;
+    transition: 200ms;
+    display: flex;
+    background: $light-black;
+    border-radius: 0.5rem;
+    overflow: hidden;
+
+    .message-action {
+      display: grid;
+      place-items: center;
+      border: none;
+      text-align: center;
+      padding: 0.5rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      background: transparent;
+
+      &.delete {
+        svg {
+          fill: $red;
+        }
+      }
+
+      &:hover {
+        background: $dark-gray;
+      }
     }
   }
 
   &:hover {
     background: $dark-gray;
+
+    .message-actions {
+      opacity: 1;
+      pointer-events: all;
+    }
   }
 }
 

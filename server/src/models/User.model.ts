@@ -6,6 +6,7 @@ export interface User extends Document {
   email: string;
   avatar_id: string;
   created_at: number;
+  discriminator: string;
 
   /**
    * An array of guild Id's

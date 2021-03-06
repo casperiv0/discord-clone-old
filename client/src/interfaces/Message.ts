@@ -10,6 +10,7 @@ interface Message {
     _id: User["_id"];
     username: User["username"];
     avatar_id: User["avatar_id"];
+    discriminator: User["discriminator"];
   };
 }
 

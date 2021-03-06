@@ -36,7 +36,7 @@ router.get("/", useAuth, async (req: IRequest, res: Response) => {
   try {
     const data = await GuildModel.find();
     const channelData = await ChannelModel.find();
-    const user = await UserModel.findById(req.user?._id);
+    const user = await UserModel.findById(req.user);
 
     if (!user) {
       return res.json(errorObj("User was not found"));
@@ -66,7 +66,7 @@ router.get("/", useAuth, async (req: IRequest, res: Response) => {
 
 router.get("/:guild_id", useAuth, async (req: IRequest, res: Response) => {
   const { guild_id } = req.params;
-  const user = await UserModel.findById(req.user?._id);
+  const user = await UserModel.findById(req.user);
   const channelData = await ChannelModel.find();
 
   if (!user) {
@@ -101,7 +101,7 @@ router.post("/", useAuth, async (req: IRequest, res: Response) => {
 
     const newGuild = await GuildModel.create({
       name,
-      owner_id: `${req.user?._id}`,
+      owner_id: `${req.user}`,
     });
 
     const category = await new ChannelModel({
@@ -121,7 +121,7 @@ router.post("/", useAuth, async (req: IRequest, res: Response) => {
     });
     await channel.save();
 
-    const user = await UserModel.findById(req.user?._id);
+    const user = await UserModel.findById(req.user);
 
     if (!user) {
       return res.json(errorObj("User was not found"));
@@ -146,7 +146,7 @@ router.delete("/:guild_id", useAuth, async (req: IRequest, res: Response) => {
   const { guild_id } = req.params;
 
   try {
-    const user = await UserModel.findById(req.user?._id);
+    const user = await UserModel.findById(req.user);
 
     if (!user?.guilds.includes(guild_id)) {
       return res.json(errorObj("You are not in this guild"));
@@ -154,7 +154,7 @@ router.delete("/:guild_id", useAuth, async (req: IRequest, res: Response) => {
 
     const guild = await GuildModel.findById(guild_id);
 
-    if (guild?.owner_id?.toString() !== user?._id?.toString()) {
+    if (guild?.owner_id?.toString() !== user?.toString()) {
       return res.json(errorObj("You are not the owner of this guild"));
     }
 

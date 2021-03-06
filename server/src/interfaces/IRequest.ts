@@ -1,7 +1,10 @@
 import { Request } from "express";
 
 interface IRequest extends Request {
-  user?: { _id: string };
+  /**
+   * The user id of the authenticated user
+   */
+  user?: string;
 }
 
 export default IRequest;

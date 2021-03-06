@@ -29,6 +29,13 @@
       fill: $dark-gray;
       background: $light-gray;
       border-radius: 50%;
+      transition: background 200ms;
+    }
+
+    &:hover {
+      svg {
+        background: $white;
+      }
     }
   }
 

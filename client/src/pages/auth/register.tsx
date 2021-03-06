@@ -1,4 +1,4 @@
-import { FC, FormEvent, useState } from "react";
+import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import ErrorMessage from "../../components/error-message";
@@ -13,13 +13,13 @@ interface Props {
   register: (data: unknown) => void;
 }
 
-const RegisterPage: FC<Props> = ({ error, loading, register }) => {
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [password2, setPassword2] = useState("");
+const RegisterPage: React.FC<Props> = ({ error, loading, register }) => {
+  const [email, setEmail] = React.useState("");
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [password2, setPassword2] = React.useState("");
 
-  function onSubmit(e: FormEvent) {
+  function onSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     register({ email, username, password, password2 });

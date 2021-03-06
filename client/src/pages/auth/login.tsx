@@ -1,4 +1,4 @@
-import { FC, FormEvent, useState } from "react";
+import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { login } from "../../lib/actions/auth";
@@ -13,11 +13,11 @@ interface Props {
   login: (data: unknown) => void;
 }
 
-const LoginPage: FC<Props> = ({ login, error, loading }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const LoginPage: React.FC<Props> = ({ login, error, loading }) => {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
-  function onSubmit(e: FormEvent) {
+  function onSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     login({ email, password });

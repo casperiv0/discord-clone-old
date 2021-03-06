@@ -1,42 +1,51 @@
-import { FC, FormEvent, useEffect, useState } from "react";
+import * as React from "react";
 import { connect } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import ErrorMessage from "../../components/error-message";
 import XIcon from "../../components/icons/XIcon";
 import { Channel } from "../../interfaces/Guild";
 import State from "../../interfaces/State";
-import { getChannelById, updateChannel } from "../../lib/actions/channel";
+import { deleteChannelById, getChannelById, updateChannel } from "../../lib/actions/channel";
 import { parseChannelName } from "../../utils/utils";
 import "./styles.scss";
 
 interface Props {
   error: string | null;
   channel: Channel | null;
+  guildId: string | undefined;
   getChannelById: (channelId: string, guildId: string) => void;
+  deleteChannelById: (channelId: string, guildId: string) => Promise<boolean>;
   updateChannel: (channelId: string, guildId: string, data: unknown) => void;
 }
 
-const ChannelSettingsPage: FC<Props> = ({ channel, error, getChannelById, updateChannel }) => {
+const ChannelSettingsPage: React.FC<Props> = ({
+  channel,
+  error,
+  guildId,
+  getChannelById,
+  updateChannel,
+  deleteChannelById,
+}) => {
   const { guild_id, channel_id } = useParams<{
     guild_id: string;
     channel_id: string;
   }>();
   const history = useHistory();
-  const [name, setName] = useState("");
-  const [topic, setTopic] = useState("");
+  const [name, setName] = React.useState("");
+  const [topic, setTopic] = React.useState("");
 
-  useEffect(() => {
+  React.useEffect(() => {
     getChannelById(channel_id, guild_id);
   }, [getChannelById, channel_id, guild_id]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (channel?._id) {
       setName(channel?.name);
       setTopic(channel?.topic || "");
     }
   }, [channel]);
 
-  function onSubmit(e: FormEvent) {
+  function onSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     updateChannel(channel_id, guild_id, {
@@ -49,6 +58,16 @@ const ChannelSettingsPage: FC<Props> = ({ channel, error, getChannelById, update
     history.goBack();
   }
 
+  async function deleteChannel() {
+    if (!channel) return;
+    if (!guildId) return;
+    const deleted = await deleteChannelById(channel?._id, guildId);
+
+    if (deleted) {
+      history.push(`/channels/${guildId}/null`);
+    }
+  }
+
   return (
     <div className="settings_page_container">
       <div className="settings_page_sidebar">
@@ -56,7 +75,9 @@ const ChannelSettingsPage: FC<Props> = ({ channel, error, getChannelById, update
           <div className="settings_page_sidebar_items">
             <div className="settings_page_item btn dark active">Overview</div>
             <div className="settings_page_divider"></div>
-            <button className="btn danger">Delete Channel</button>
+            <button onClick={deleteChannel} className="btn danger">
+              Delete Channel
+            </button>
           </div>
         </div>
       </div>
@@ -107,6 +128,7 @@ const ChannelSettingsPage: FC<Props> = ({ channel, error, getChannelById, update
 const mapToProps = (state: State) => ({
   channel: state.channel.channel,
   error: state.channel.error,
+  guildId: state.guild.guild?._id,
 });
 
-export default connect(mapToProps, { getChannelById, updateChannel })(ChannelSettingsPage);
+export default connect(mapToProps, { getChannelById, updateChannel, deleteChannelById })(ChannelSettingsPage);

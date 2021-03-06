@@ -1,4 +1,4 @@
-import { FC, FormEvent, useState } from "react";
+import * as React from "react";
 import { connect } from "react-redux";
 import State from "../../interfaces/State";
 import Modal from "./index";
@@ -14,12 +14,12 @@ interface Props {
   getGuildById: (id: string) => void;
 }
 
-const CreateCategoryModal: FC<Props> = ({ error, createCategory, getGuildById }) => {
-  const [name, setName] = useState<string>("");
-  const [state, setState] = useState<string | null>(null);
+const CreateCategoryModal: React.FC<Props> = ({ error, createCategory, getGuildById }) => {
+  const [name, setName] = React.useState<string>("");
+  const [state, setState] = React.useState<string | null>(null);
   const params = useParams<{ guild_id: string }>();
 
-  async function onSubmit(e: FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     setState("loading");
     e.preventDefault();
 

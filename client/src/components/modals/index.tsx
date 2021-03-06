@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import * as React from "react";
 import ReactDOM from "react-dom";
 import { closeModal } from "../../utils/utils";
 import XIcon from "../icons/XIcon";
@@ -10,8 +10,8 @@ interface Props {
 }
 
 const element: Element | null = document.querySelector("#modal-mount");
-const Modal: FC<Props> = ({ id, title, children }) => {
-  useEffect(() => {
+const Modal: React.FC<Props> = ({ id, title, children }) => {
+  React.useEffect(() => {
     const listener = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         closeModal(id);

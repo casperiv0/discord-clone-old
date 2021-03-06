@@ -1,0 +1,74 @@
+@import "../../styles/variables";
+
+.user-popup-container {
+  position: relative;
+  width: 15rem;
+  max-height: 50rem;
+}
+
+.user-popup {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  background: $dark-gray;
+  width: 15rem;
+  height: 100%;
+  border-radius: 0.6rem;
+  z-index: 2;
+
+  position: absolute;
+  top: 0;
+  animation: fadeIn 200ms;
+
+  .popup-header {
+    border-radius: 0.8rem;
+    padding: 0.8rem;
+    width: 100%;
+    background: $light-black;
+  }
+
+  .avatar {
+    width: 4.5rem;
+    height: 4.5rem;
+    margin: 0 auto;
+    margin-bottom: 0.5rem;
+    border-radius: 100%;
+    overflow: hidden;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .name {
+    color: $white;
+    text-align: center;
+  }
+
+  &.left {
+    left: 1rem;
+    top: 2rem;
+  }
+
+  &.right {
+    right: 0;
+    margin-right: 0.5rem;
+  }
+
+  &.active {
+    display: flex;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(0.8rem);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0);
+  }
+}

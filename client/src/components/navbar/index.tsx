@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import * as React from "react";
 import { connect } from "react-redux";
 import Guild, { Channel } from "../../interfaces/Guild";
 import State from "../../interfaces/State";
@@ -13,10 +13,10 @@ interface Props {
   deleteGuildById: (id: string) => Promise<boolean>;
 }
 
-const Navbar: FC<Props> = ({ guild, channel, deleteGuildById }) => {
-  const [open, setOpen] = useState(false);
+const Navbar: React.FC<Props> = ({ guild, channel, deleteGuildById }) => {
+  const [open, setOpen] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     document.querySelector(".app-container")?.addEventListener("click", () => {
       setOpen(false);
     });
@@ -25,7 +25,7 @@ const Navbar: FC<Props> = ({ guild, channel, deleteGuildById }) => {
   return (
     <nav className="navbar">
       <div className="guild_title_container">
-        <button disabled={!guild?._id} onClick={() => setOpen((o) => !o)} className="guild_title">
+        <button disabled={!guild?._id} onClick={() => setOpen((v) => !v)} className="guild_title">
           {guild?.name}
         </button>
 
