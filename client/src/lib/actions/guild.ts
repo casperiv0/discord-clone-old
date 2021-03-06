@@ -2,7 +2,14 @@ import * as React from "react";
 import Guild from "../../interfaces/Guild";
 import Logger from "../../utils/Logger";
 import { handleRequest, isSuccess } from "../../utils/utils";
-import { GET_GUILD_BY_ID, GET_USER_GUILDS, CREATE_GUILD, GUILD_ERROR, DELETE_GUILD_BY_ID } from "../types";
+import {
+  GET_GUILD_BY_ID,
+  GET_USER_GUILDS,
+  CREATE_GUILD,
+  GUILD_ERROR,
+  DELETE_GUILD_BY_ID,
+  UPDATE_GUILD_BY_ID,
+} from "../types";
 
 interface IDispatch {
   type: string;
@@ -58,11 +65,15 @@ export const getUserGuilds = () => async (dispatch: React.Dispatch<IDispatch>): 
 export const getGuildById = (id: string) => async (dispatch: React.Dispatch<IDispatch>): Promise<boolean> => {
   try {
     const res = await handleRequest(`/guilds/${id}`, "GET");
+    const membersRes = await handleRequest(`/guilds/${id}/members`, "GET");
 
     if (isSuccess(res)) {
       dispatch({
         type: GET_GUILD_BY_ID,
-        guild: res.data.guild,
+        guild: {
+          ...res.data.guild,
+          members: membersRes.data.members,
+        },
       });
       Logger.log(GET_USER_GUILDS, `Successfully fetched guild with id: ${id}`);
 
@@ -91,6 +102,45 @@ export const deleteGuildById = (id: string) => async (dispatch: React.Dispatch<I
     }
   } catch (e) {
     console.error(e);
+    return false;
+  }
+};
+
+export const updateGuildById = (id: string, data: Partial<Guild>) => async (
+  dispatch: React.Dispatch<IDispatch>,
+): Promise<boolean> => {
+  try {
+    const res = await handleRequest(`/guilds/${id}`, "PUT", data);
+
+    if (isSuccess(res)) {
+      dispatch({
+        type: UPDATE_GUILD_BY_ID,
+      });
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    Logger.error(UPDATE_GUILD_BY_ID, e);
+    return false;
+  }
+};
+
+export const joinGuild = (code: string) => async (dispatch: React.Dispatch<IDispatch>): Promise<boolean> => {
+  try {
+    const res = await handleRequest(`/invites/code/${code}`, "POST");
+
+    if (isSuccess(res)) {
+      dispatch({
+        type: "JOIN_GUILD",
+      });
+
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    Logger.error("JOIN_GUILD", e);
     return false;
   }
 };

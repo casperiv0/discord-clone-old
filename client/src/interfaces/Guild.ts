@@ -1,3 +1,5 @@
+import User from "./User";
+
 interface Guild {
   _id: string;
   name: string;
@@ -11,6 +13,9 @@ interface Guild {
     categoryChannels: Category[];
     noCategoryChannels: Category[];
   };
+
+  member_ids: string;
+  members: User[];
 }
 
 export interface Category extends Channel {

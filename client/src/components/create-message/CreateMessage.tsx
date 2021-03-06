@@ -1,5 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { useLocation } from "react-router";
 import Guild, { Channel } from "../../interfaces/Guild";
 import State from "../../interfaces/State";
 import { createMessage } from "../../lib/actions/message";
@@ -17,10 +18,13 @@ const CreateMessageContainer: React.FC<Props> = ({ channel, guild, createMessage
   const [content, setContent] = React.useState("");
   const [state, setState] = React.useState<string | null>(null);
   const ref = React.useRef<HTMLInputElement>(null);
+  const location = useLocation();
 
   React.useEffect(() => {
     ref.current?.focus();
+  }, [location.pathname]);
 
+  React.useEffect(() => {
     return () => {
       setState(null);
       setContent("");

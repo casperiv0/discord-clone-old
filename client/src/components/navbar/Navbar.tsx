@@ -1,8 +1,8 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import Guild, { Channel } from "../../interfaces/Guild";
 import State from "../../interfaces/State";
-import { deleteGuildById } from "../../lib/actions/guild";
 import { openModal } from "../../utils/utils";
 import HashIcon from "../icons/HashIcon";
 import "./styles.scss";
@@ -10,10 +10,9 @@ import "./styles.scss";
 interface Props {
   guild: Guild | null;
   channel: Channel | null;
-  deleteGuildById: (id: string) => Promise<boolean>;
 }
 
-const Navbar: React.FC<Props> = ({ guild, channel, deleteGuildById }) => {
+const Navbar: React.FC<Props> = ({ guild, channel }) => {
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -31,16 +30,18 @@ const Navbar: React.FC<Props> = ({ guild, channel, deleteGuildById }) => {
 
         <div className={`guild_title_dropdown ${open ? "active" : "closed"}`}>
           <div className="dropdown_content">
-            <button className="dropdown_btn">Server Settings</button>
+            <Link to={`/channels/${guild?._id}/settings`} className="dropdown_btn">
+              Server Settings
+            </Link>
             {/* //TODO: have perms here */}
+            <button onClick={() => openModal("invite-modal")} className="dropdown_btn">
+              Invite members
+            </button>
             <button onClick={() => openModal("create-channel-modal")} className="dropdown_btn">
               Create Channel
             </button>
             <button onClick={() => openModal("create-category-modal")} className="dropdown_btn">
               Create Category
-            </button>
-            <button onClick={() => deleteGuildById(guild?._id!)} className="dropdown_btn danger">
-              Delete guild
             </button>
           </div>
         </div>
@@ -63,4 +64,4 @@ const mapToProps = (state: State) => ({
   channel: state.channel.channel,
 });
 
-export default connect(mapToProps, { deleteGuildById })(Navbar);
+export default connect(mapToProps)(Navbar);

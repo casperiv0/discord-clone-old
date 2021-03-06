@@ -4,7 +4,7 @@ import useValidObjectId from "../hooks/useValidObjectId";
 import IRequest from "../interfaces/IRequest";
 import ChannelModel, { Channel } from "../models/Channel.model";
 import GuildModel, { Guild } from "../models/Guild.model";
-import UserModel from "../models/User.model";
+import UserModel, { User } from "../models/User.model";
 import logger from "../utils/logger";
 import { errorObj } from "../utils/utils";
 
@@ -92,6 +92,43 @@ router.get("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: IReq
   });
 });
 
+router.get("/:guild_id/members", useValidObjectId("guild_id"), useAuth, async (req: IRequest, res: Response) => {
+  const { guild_id } = req.params;
+  const user = await UserModel.findById(req.user);
+
+  if (!user) {
+    return res.json(errorObj("User was not found"));
+  }
+  if (!user.guilds.includes(guild_id)) {
+    return res.json(errorObj("User is not in this guild")).status(401);
+  }
+
+  const guild = await GuildModel.findById(guild_id);
+
+  if (!guild) {
+    return res.json(errorObj("Guild was not found"));
+  }
+
+  const members: User[] = [];
+  for (let i = 0; i < guild.member_ids.length; i++) {
+    const member = await UserModel.findById(guild.member_ids[i]?.toString(), {
+      username: 1,
+      _id: 1,
+      avatar_id: 1,
+      discriminator: 1,
+    });
+
+    members.push(member!);
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  return res.json({
+    status: "success",
+    members,
+  });
+});
+
 router.post("/", useAuth, async (req: IRequest, res: Response) => {
   const { name } = req.body;
 
@@ -141,6 +178,33 @@ router.post("/", useAuth, async (req: IRequest, res: Response) => {
   }
 });
 
+router.put("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: IRequest, res: Response) => {
+  const { guild_id } = req.params;
+  const { name } = req.body;
+
+  if (!name) {
+    return res.json(errorObj("please fill in all fields"));
+  }
+
+  try {
+    const guild = await GuildModel.findById(guild_id);
+    if (!guild) {
+      return res.json(errorObj("guild was not found"));
+    }
+
+    guild.name = name;
+
+    await guild.save();
+
+    return res.json({
+      status: "success",
+    });
+  } catch (e) {
+    logger.error("UPDATE_GUILD", e);
+    return res.json(errorObj("An error occurred")).status(500);
+  }
+});
+
 router.delete("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: IRequest, res: Response) => {
   const { guild_id } = req.params;
 
@@ -153,7 +217,7 @@ router.delete("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: I
 
     const guild = await GuildModel.findById(guild_id);
 
-    if (guild?.owner_id?.toString() !== user?.toString()) {
+    if (guild?.owner_id?.toString() !== user._id?.toString()) {
       return res.json(errorObj("You are not the owner of this guild"));
     }
 

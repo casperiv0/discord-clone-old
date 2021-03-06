@@ -9,6 +9,7 @@ const LoginPage = React.lazy(() => import("./pages/auth/login"));
 const RegisterPage = React.lazy(() => import("./pages/auth/register"));
 const GuildPage = React.lazy(() => import("./pages/guild"));
 const ChannelSettingsPage = React.lazy(() => import("./pages/channel-settings"));
+const GuildSettingsPage = React.lazy(() => import("./pages/guild-settings"));
 
 const App: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ const App: React.FC = () => {
           <Route path="/login" exact component={LoginPage} />
           <Route path="/register" exact component={RegisterPage} />
 
+          <AuthRoute path="/channels/:guild_id/settings" component={GuildSettingsPage} />
           <AuthRoute path="/channels/:guild_id/:channel_id/settings" component={ChannelSettingsPage} />
           <AuthRoute path="/channels/:guild_id/:channel_id" component={GuildPage} />
         </Switch>

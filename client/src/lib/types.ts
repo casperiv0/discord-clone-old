@@ -7,6 +7,7 @@ export const GUILD_ERROR = "GUILD_ERROR";
 export const GET_USER_GUILDS = "GET_USER_GUILDS";
 export const GET_GUILD_BY_ID = "GET_GUILD_BY_ID";
 export const DELETE_GUILD_BY_ID = "DELETE_GUILD_BY_ID";
+export const UPDATE_GUILD_BY_ID = "UPDATE_GUILD_BY_ID";
 
 export const GET_CHANNEL_BY_ID = "GET_CHANNEL_BY_ID";
 export const UPDATE_CHANNEL_BY_ID = "UPDATE_CHANNEL_BY_ID";

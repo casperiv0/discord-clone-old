@@ -1,7 +1,7 @@
 import * as React from "react";
 import Guild, { Channel } from "../../interfaces/Guild";
 import Logger from "../../utils/Logger";
-import { closeModal, handleRequest, isSuccess } from "../../utils/utils";
+import { closeModal, handleRequest, isSuccess, parsePayloadData } from "../../utils/utils";
 import { GET_CHANNEL_BY_ID, CREATE_CHANNEL, CHANNEL_ERROR, UPDATE_CHANNEL_BY_ID, DELETE_CHANNEL_BY_ID } from "../types";
 
 interface IDispatch {
@@ -61,8 +61,11 @@ export const createChannel = (name: string, guildId: string) => async (
   dispatch: React.Dispatch<IDispatch>,
 ): Promise<string | undefined> => {
   try {
+    const payload = parsePayloadData<{ category_id: string }>("create-channel-modal");
+
     const res = await handleRequest(`/channels/${guildId}?type=1`, "POST", {
       name,
+      parent_id: payload?.category_id,
     });
 
     if (isSuccess(res)) {

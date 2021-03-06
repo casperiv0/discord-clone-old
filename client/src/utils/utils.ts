@@ -58,6 +58,19 @@ export const closeModal = (id: string): void => {
   }, 105);
 };
 
+export function parsePayloadData<T = unknown>(id: string): T | null {
+  const element = document.getElementById(id);
+  if (!element) return null;
+
+  const data = element.getAttribute("data-payload");
+
+  if (!data || data === "undefined") {
+    return null;
+  } else {
+    return JSON.parse(data);
+  }
+}
+
 export function parseChannelName(value: string): string {
   // 1st replace: replace space with '-'
   // 2nd replace: replace multiple '-' with 1 '-'

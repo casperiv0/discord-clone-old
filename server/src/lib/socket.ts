@@ -1,3 +1,4 @@
+import { isValidObjectId } from "mongoose";
 import { Socket } from "socket.io";
 import ChannelModel from "../models/Channel.model";
 import GuildModel from "../models/Guild.model";
@@ -6,8 +7,8 @@ import logger from "../utils/logger";
 
 io.on("connection", async (socket: Socket) => {
   socket.on("joinChannel", async (guildId: string, channelId: string) => {
-    const guild = await GuildModel.findById(guildId);
-    const channel = await ChannelModel.findById(channelId);
+    const guild = isValidObjectId(guildId) && (await GuildModel.findById(guildId));
+    const channel = isValidObjectId(channelId) && (await ChannelModel.findById(channelId));
 
     if (!guild) {
       logger.log("JOIN_CHANNEL", `INVALID_GUILD: ${guildId}`);

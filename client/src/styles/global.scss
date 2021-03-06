@@ -25,6 +25,8 @@ body {
   height: 100vh;
 }
 
-button:disabled {
+button:disabled,
+input:disabled,
+textarea:disabled {
   cursor: not-allowed;
 }

@@ -4,7 +4,6 @@ import State from "../../interfaces/State";
 import Modal from "./index";
 import { createChannel } from "../../lib/actions/channel";
 import { useHistory, useParams } from "react-router-dom";
-import { getGuildById } from "../../lib/actions/guild";
 import ErrorMessage from "../error-message";
 import { parseChannelName } from "../../utils/utils";
 import Loader from "../loader";
@@ -12,10 +11,9 @@ import Loader from "../loader";
 interface Props {
   error: string | null;
   createChannel: (name: string, guildId: string) => Promise<string | undefined>;
-  getGuildById: (id: string) => void;
 }
 
-const CreateChannelModal: React.FC<Props> = ({ error, createChannel, getGuildById }) => {
+const CreateChannelModal: React.FC<Props> = ({ error, createChannel }) => {
   const [chName, setName] = React.useState<string>("");
   const [state, setState] = React.useState<string | null>(null);
   const params = useParams<{ guild_id: string }>();
@@ -30,6 +28,7 @@ const CreateChannelModal: React.FC<Props> = ({ error, createChannel, getGuildByI
       setState("error");
     } else {
       setName("");
+      setState(null);
       history.push(`/channels/${params.guild_id}/${channelId}`);
     }
   }
@@ -44,7 +43,7 @@ const CreateChannelModal: React.FC<Props> = ({ error, createChannel, getGuildByI
     <Modal title="Create Channel" id="create-channel-modal">
       <div className="modal_body">
         <form id="create_channel_form" onSubmit={onSubmit}>
-          {error ? <ErrorMessage message={error} type="warning" /> : null}
+          {state === "error" ? <ErrorMessage message={error!} type="warning" /> : null}
           <div className="form_group">
             <label htmlFor="name">channel name</label>
             <input
@@ -71,4 +70,4 @@ const mapToProps = (state: State) => ({
   error: state.channel.error,
 });
 
-export default connect(mapToProps, { createChannel, getGuildById })(CreateChannelModal);
+export default connect(mapToProps, { createChannel })(CreateChannelModal);

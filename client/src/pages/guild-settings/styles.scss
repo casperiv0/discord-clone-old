@@ -1,0 +1,81 @@
+@import "../../styles/variables";
+
+.settings_page_container {
+  display: grid;
+  grid-template-columns: auto 75%;
+  grid-template-areas:
+    "sidebar overview"
+    "sidebar overview"
+    "sidebar overview";
+  height: 100vh;
+  width: 100%;
+
+  .settings_page_sidebar {
+    grid-area: sidebar;
+    background: #2f3136;
+    min-width: 250px;
+  }
+
+  .settings_page_sidebar_items {
+    display: flex;
+    flex-direction: column;
+
+    .settings_page_item {
+      &.active {
+        background: #393c43;
+      }
+    }
+  }
+
+  .settings_page_divider {
+    margin: 0.2rem 0;
+    height: 1.5px;
+    background: #3b3d42;
+    border-radius: 0.2rem;
+  }
+
+  .settings_page_overview {
+    grid-area: overview;
+    background: #36393f;
+  }
+
+  .settings_page_content {
+    color: $white;
+    padding: 1rem;
+  }
+
+  .settings_page_title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: $white;
+    margin-bottom: 1.5rem;
+
+    h3 {
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .settings_page_close {
+      color: $white;
+      display: grid;
+      place-items: center;
+      background: transparent;
+      padding: 0.4rem;
+      border-radius: 50%;
+      border: 2px solid $light-gray;
+      cursor: pointer;
+      transition: background 200ms;
+
+      svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      &:hover {
+        background: rgba($color: $light-gray, $alpha: 0.3);
+      }
+    }
+  }
+}

@@ -106,6 +106,7 @@
         margin: 0.1rem 0;
         transition: background 150ms, color 150ms;
         outline: none;
+        text-decoration: none;
 
         &:hover {
           color: $white;

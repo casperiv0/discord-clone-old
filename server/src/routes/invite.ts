@@ -58,50 +58,46 @@ router.post("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: IRe
 /**
  * Join a guild with the invite code
  */
-router.post(
-  "/:guild_id/:invite_code",
-  useValidObjectId("guild_id", "invite_code"),
-  useAuth,
-  async (req: IRequest, res: Response) => {
-    const { guild_id, invite_code } = req.params;
+router.post("/code/:invite_code", useAuth, async (req: IRequest, res: Response) => {
+  const { invite_code } = req.params;
 
-    try {
-      const invite = await InviteModel.findOne({ code: invite_code, guild_id });
+  try {
+    const invite = await InviteModel.findOne({ code: invite_code });
 
-      if (!invite) {
-        return res.json(errorObj("invite not found")).status(404);
-      }
-
-      const user = await UserModel.findById(req.user);
-      const guild = await GuildModel.findById(guild_id);
-
-      if (!guild) {
-        return res.json(errorObj("guild not found"));
-      }
-
-      if (!user) {
-        return res.json(errorObj("user not found"));
-      }
-
-      if (user.guilds.length >= 100) {
-        return res.json(errorObj("cannot join more than 100 guilds"));
-      }
-
-      user.guilds = [...user.guilds, invite.guild_id];
-      user.save();
-
-      guild.member_ids = [...guild.member_ids, `${req.user}`];
-      guild.save();
-
-      return res.json({
-        status: "success",
-        guildId: guild?._id,
-      });
-    } catch (e) {
-      logger.error("GET_INVITE_CODE", e);
-      return res.json(errorObj("An error occurred")).status(500);
+    if (!invite) {
+      return res.json(errorObj("invite not found")).status(404);
     }
-  },
-);
+
+    const user = await UserModel.findById(req.user);
+    const guild = await GuildModel.findById(invite?.guild_id);
+
+    if (!guild) {
+      return res.json(errorObj("guild not found"));
+    }
+
+    if (!user) {
+      return res.json(errorObj("user not found"));
+    }
+
+    if (user.guilds.includes(guild._id?.toString())) {
+      return res.json(errorObj("you are already in this guild"));
+    }
+
+    if (user.guilds.length >= 100) {
+      return res.json(errorObj("cannot join more than 100 guilds"));
+    }
+
+    await UserModel.findByIdAndUpdate(user._id, { guilds: [...user.guilds, invite.guild_id] });
+    await GuildModel.findByIdAndUpdate(guild._id, { member_ids: [...guild.member_ids, req.user!] });
+
+    return res.json({
+      status: "success",
+      guildId: guild?._id,
+    });
+  } catch (e) {
+    logger.error("GET_INVITE_CODE", e);
+    return res.json(errorObj("An error occurred")).status(500);
+  }
+});
 
 export default router;
