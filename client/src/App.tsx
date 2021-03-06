@@ -19,10 +19,7 @@ const App: FC = () => {
             <Route path="/login" exact component={LoginPage} />
             <Route path="/register" exact component={RegisterPage} />
 
-            <AuthRoute
-              path="/channels/:guild_id/:channel_id/settings"
-              component={ChannelSettingsPage}
-            />
+            <AuthRoute path="/channels/:guild_id/:channel_id/settings" component={ChannelSettingsPage} />
             <AuthRoute path="/channels/:guild_id/:channel_id" component={GuildPage} />
           </Switch>
         </Provider>

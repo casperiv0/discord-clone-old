@@ -24,7 +24,7 @@ function returnGuildChannels(guild: Guild, channelData: Channel[]) {
   }
 
   const noCateChannels = channelData.filter(
-    (ch) => ch.parent_id === "no_parent" && ch?.type === 1 && ch?.guild_id === guild._id.toString()
+    (ch) => ch.parent_id === "no_parent" && ch?.type === 1 && ch?.guild_id === guild._id.toString(),
   );
 
   noCategoryChannels.push({ channels: noCateChannels });

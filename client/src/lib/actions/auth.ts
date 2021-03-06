@@ -11,9 +11,7 @@ interface IDispatch {
   isAuth?: boolean;
 }
 
-export const login = (data: unknown) => async (
-  dispatch: Dispatch<IDispatch>
-): Promise<void | string> => {
+export const login = (data: unknown) => async (dispatch: Dispatch<IDispatch>): Promise<void | string> => {
   dispatch({ type: SET_LOADING, loading: true });
 
   try {
@@ -36,9 +34,7 @@ export const login = (data: unknown) => async (
   dispatch({ type: SET_LOADING, loading: false });
 };
 
-export const register = (data: unknown) => async (
-  dispatch: Dispatch<IDispatch>
-): Promise<void | string> => {
+export const register = (data: unknown) => async (dispatch: Dispatch<IDispatch>): Promise<void | string> => {
   dispatch({ type: SET_LOADING, loading: true });
 
   try {
@@ -61,9 +57,7 @@ export const register = (data: unknown) => async (
   dispatch({ type: SET_LOADING, loading: false });
 };
 
-export const checkAuth = () => async (
-  dispatch: Dispatch<IDispatch>
-): Promise<void | string> => {
+export const checkAuth = () => async (dispatch: Dispatch<IDispatch>): Promise<void | string> => {
   dispatch({ type: SET_LOADING, loading: true });
 
   try {

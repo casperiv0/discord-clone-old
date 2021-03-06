@@ -44,12 +44,7 @@ const RegisterPage: FC<Props> = ({ error, loading, register }) => {
         </div>
         <div className="form_group">
           <label htmlFor="username">Username</label>
-          <input
-            className="form_input"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            id="username"
-          />
+          <input className="form_input" value={username} onChange={(e) => setUsername(e.target.value)} id="username" />
         </div>
         <div className="form_group">
           <label htmlFor="password">PASSWORD</label>

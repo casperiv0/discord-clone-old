@@ -11,9 +11,7 @@ interface IDispatch {
   loading?: boolean;
 }
 
-export const getMessages = (guildId: string, channelId: string) => async (
-  dispatch: React.Dispatch<IDispatch>
-) => {
+export const getMessages = (guildId: string, channelId: string) => async (dispatch: React.Dispatch<IDispatch>) => {
   try {
     dispatch({ type: SET_FETCHING_MSGS, loading: true });
     const res = await handleRequest(`/message/${guildId}/${channelId}`, "GET");
@@ -32,7 +30,7 @@ export const getMessages = (guildId: string, channelId: string) => async (
 };
 
 export const createMessage = (message: string, guildId: string, channelId: string) => async (
-  dispatch: React.Dispatch<IDispatch>
+  dispatch: React.Dispatch<IDispatch>,
 ): Promise<boolean> => {
   try {
     const res = await handleRequest("/message", "POST", {

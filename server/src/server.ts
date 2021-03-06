@@ -12,9 +12,7 @@ import Logger from "./utils/logger";
 
 const app: Application = express();
 const port = Number(process.env.PORT) || 3030;
-const server = app.listen(port, () =>
-  Logger.log("APP", `App is running at: http://localhost:${port}`)
-);
+const server = app.listen(port, () => Logger.log("APP", `App is running at: http://localhost:${port}`));
 
 const io = new Server(server, {
   cors: {

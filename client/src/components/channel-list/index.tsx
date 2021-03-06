@@ -24,15 +24,9 @@ const GuildChannelList: React.FC<Props> = ({ guild }) => {
               const isActive = params?.channel_id === channel?._id;
 
               return (
-                <div
-                  className={`guild_channel_item ${isActive ? "active" : ""}`}
-                  key={channel?._id}
-                >
+                <div className={`guild_channel_item ${isActive ? "active" : ""}`} key={channel?._id}>
                   <Link to={`/channels/${guild?._id}/${channel?._id}`}>{channel?.name}</Link>
-                  <Link
-                    to={`/channels/${guild?._id}/${channel?._id}/settings`}
-                    className="manage-channel"
-                  >
+                  <Link to={`/channels/${guild?._id}/${channel?._id}/settings`} className="manage-channel">
                     <CogIcon />
                   </Link>
                 </div>
@@ -48,15 +42,9 @@ const GuildChannelList: React.FC<Props> = ({ guild }) => {
             {category.channels.map((channel: Channel) => {
               const isActive = params?.channel_id === channel?._id;
               return (
-                <div
-                  className={`guild_channel_item ${isActive ? "active" : ""}`}
-                  key={channel?._id}
-                >
+                <div className={`guild_channel_item ${isActive ? "active" : ""}`} key={channel?._id}>
                   <Link to={`/channels/${guild?._id}/${channel?._id}`}>{channel?.name}</Link>
-                  <Link
-                    to={`/channels/${guild?._id}/${channel?._id}/settings`}
-                    className="manage-channel"
-                  >
+                  <Link to={`/channels/${guild?._id}/${channel?._id}/settings`} className="manage-channel">
                     <CogIcon />
                   </Link>
                 </div>

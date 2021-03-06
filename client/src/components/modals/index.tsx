@@ -37,7 +37,7 @@ const Modal: FC<Props> = ({ id, title, children }) => {
         </div>
       </div>
     </>,
-    element!
+    element!,
   );
 };
 

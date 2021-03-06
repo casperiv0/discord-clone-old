@@ -9,7 +9,7 @@ const url = process.env.REACT_APP_API_URL + "/api/v1";
 export function handleRequest(
   path: string,
   method: AllowedMethods,
-  data?: unknown
+  data?: unknown,
 ): AxiosPromise<{
   status: "error" | "success";
   error: string;
@@ -28,9 +28,7 @@ export function handleRequest(
   });
 }
 
-export function isSuccess(
-  res: AxiosResponse<{ status: "error" | "success" }>
-): boolean {
+export function isSuccess(res: AxiosResponse<{ status: "error" | "success" }>): boolean {
   return res.data.status && res.data.status === "success";
 }
 

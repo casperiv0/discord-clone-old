@@ -47,23 +47,13 @@ const CreateGuildModal: FC<Props> = ({ user, error, createGuild }) => {
           {error ? <ErrorMessage message={error} type="warning" /> : null}
           <div className="form_group">
             <label htmlFor="name">Server Name</label>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              type="text"
-              className="form_input"
-            />
+            <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="form_input" />
           </div>
         </form>
       </div>
 
       <div className="modal_footer">
-        <button
-          disabled={state === "loading"}
-          form="create_guild_form"
-          type="submit"
-          className="btn blue"
-        >
+        <button disabled={state === "loading"} form="create_guild_form" type="submit" className="btn blue">
           {state === "loading" ? <Loader /> : "Create server"}
         </button>
       </div>

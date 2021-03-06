@@ -25,7 +25,7 @@ export function createDiscriminator(): string {
 export async function isUserAndChannelInGuild(
   userId: string | undefined,
   channelId: string,
-  guildId: string
+  guildId: string,
 ): Promise<string | true> {
   try {
     const user = await UserModel.findById(userId);

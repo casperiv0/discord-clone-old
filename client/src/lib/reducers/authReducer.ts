@@ -24,10 +24,7 @@ type Actions =
       loading: boolean;
     };
 
-export default function authReducer(
-  state = initState,
-  action: Actions
-): State["auth"] {
+export default function authReducer(state = initState, action: Actions): State["auth"] {
   switch (action.type) {
     case "AUTHENTICATE": {
       return {

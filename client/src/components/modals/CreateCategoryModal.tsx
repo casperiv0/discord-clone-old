@@ -14,11 +14,7 @@ interface Props {
   getGuildById: (id: string) => void;
 }
 
-const CreateCategoryModal: FC<Props> = ({
-  error,
-  createCategory,
-  getGuildById,
-}) => {
+const CreateCategoryModal: FC<Props> = ({ error, createCategory, getGuildById }) => {
   const [name, setName] = useState<string>("");
   const [state, setState] = useState<string | null>(null);
   const params = useParams<{ guild_id: string }>();
@@ -55,11 +51,7 @@ const CreateCategoryModal: FC<Props> = ({
         </form>
       </div>
       <div className="modal_footer">
-        <button
-          disabled={state === "loading"}
-          form="create_category_form"
-          className="btn blue"
-        >
+        <button disabled={state === "loading"} form="create_category_form" className="btn blue">
           {state === "loading" ? <Loader /> : " Create Category"}
         </button>
       </div>
@@ -71,6 +63,4 @@ const mapToProps = (state: State) => ({
   error: state.channel.error,
 });
 
-export default connect(mapToProps, { createCategory, getGuildById })(
-  CreateCategoryModal
-);
+export default connect(mapToProps, { createCategory, getGuildById })(CreateCategoryModal);

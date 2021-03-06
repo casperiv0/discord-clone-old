@@ -2,13 +2,7 @@ import { Dispatch } from "react";
 import Guild from "../../interfaces/Guild";
 import Logger from "../../utils/Logger";
 import { handleRequest, isSuccess } from "../../utils/utils";
-import {
-  GET_GUILD_BY_ID,
-  GET_USER_GUILDS,
-  CREATE_GUILD,
-  GUILD_ERROR,
-  DELETE_GUILD_BY_ID,
-} from "../types";
+import { GET_GUILD_BY_ID, GET_USER_GUILDS, CREATE_GUILD, GUILD_ERROR, DELETE_GUILD_BY_ID } from "../types";
 
 interface IDispatch {
   type: string;
@@ -18,9 +12,7 @@ interface IDispatch {
   loading?: boolean;
 }
 
-export const createGuild = (data: unknown) => async (
-  dispatch: Dispatch<IDispatch>
-): Promise<string | undefined> => {
+export const createGuild = (data: unknown) => async (dispatch: Dispatch<IDispatch>): Promise<string | undefined> => {
   try {
     const res = await handleRequest("/guilds", "POST", data);
 
@@ -45,9 +37,7 @@ export const createGuild = (data: unknown) => async (
   }
 };
 
-export const getUserGuilds = () => async (
-  dispatch: Dispatch<IDispatch>
-): Promise<void | string> => {
+export const getUserGuilds = () => async (dispatch: Dispatch<IDispatch>): Promise<void | string> => {
   try {
     const res = await handleRequest("/guilds", "GET");
 
@@ -63,9 +53,7 @@ export const getUserGuilds = () => async (
   }
 };
 
-export const getGuildById = (id: string) => async (
-  dispatch: Dispatch<IDispatch>
-): Promise<boolean> => {
+export const getGuildById = (id: string) => async (dispatch: Dispatch<IDispatch>): Promise<boolean> => {
   try {
     const res = await handleRequest(`/guilds/${id}`, "GET");
 
@@ -86,9 +74,7 @@ export const getGuildById = (id: string) => async (
   }
 };
 
-export const deleteGuildById = (id: string) => async (
-  dispatch: Dispatch<IDispatch>
-): Promise<boolean> => {
+export const deleteGuildById = (id: string) => async (dispatch: Dispatch<IDispatch>): Promise<boolean> => {
   try {
     const res = await handleRequest(`/guilds/${id}`, "DELETE");
 

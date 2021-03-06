@@ -17,10 +17,7 @@ type Actions =
       error: string;
     };
 
-export default function channelReducer(
-  state = initState,
-  action: Actions
-): State["channel"] {
+export default function channelReducer(state = initState, action: Actions): State["channel"] {
   switch (action.type) {
     case "GET_CHANNEL_BY_ID": {
       return {

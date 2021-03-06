@@ -16,13 +16,7 @@ interface Props {
   getMessages: (guildId: string, channelId: string) => void;
 }
 
-const MessagesList: React.FC<Props> = ({
-  messages: ApiMessages,
-  guildId,
-  channelId,
-  loading,
-  getMessages,
-}) => {
+const MessagesList: React.FC<Props> = ({ messages: ApiMessages, guildId, channelId, loading, getMessages }) => {
   const [messages, setMessages] = React.useState<Message[]>(ApiMessages);
 
   React.useEffect(() => {

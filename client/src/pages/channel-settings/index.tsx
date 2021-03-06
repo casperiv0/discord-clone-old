@@ -16,12 +16,7 @@ interface Props {
   updateChannel: (channelId: string, guildId: string, data: unknown) => void;
 }
 
-const ChannelSettingsPage: FC<Props> = ({
-  channel,
-  error,
-  getChannelById,
-  updateChannel,
-}) => {
+const ChannelSettingsPage: FC<Props> = ({ channel, error, getChannelById, updateChannel }) => {
   const { guild_id, channel_id } = useParams<{
     guild_id: string;
     channel_id: string;
@@ -114,6 +109,4 @@ const mapToProps = (state: State) => ({
   error: state.channel.error,
 });
 
-export default connect(mapToProps, { getChannelById, updateChannel })(
-  ChannelSettingsPage
-);
+export default connect(mapToProps, { getChannelById, updateChannel })(ChannelSettingsPage);

@@ -14,11 +14,7 @@ interface Props {
   getGuildById: (id: string) => void;
 }
 
-const CreateChannelModal: FC<Props> = ({
-  error,
-  createChannel,
-  getGuildById,
-}) => {
+const CreateChannelModal: FC<Props> = ({ error, createChannel, getGuildById }) => {
   const [chName, setName] = useState<string>("");
   const params = useParams<{ guild_id: string }>();
 
@@ -71,6 +67,4 @@ const mapToProps = (state: State) => ({
   error: state.channel.error,
 });
 
-export default connect(mapToProps, { createChannel, getGuildById })(
-  CreateChannelModal
-);
+export default connect(mapToProps, { createChannel, getGuildById })(CreateChannelModal);

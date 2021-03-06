@@ -25,48 +25,32 @@ const Navbar: FC<Props> = ({ guild, channel, deleteGuildById }) => {
   return (
     <nav className="navbar">
       <div className="guild_title_container">
-        <button
-          disabled={!guild?._id}
-          onClick={() => setOpen((o) => !o)}
-          className="guild_title"
-        >
+        <button disabled={!guild?._id} onClick={() => setOpen((o) => !o)} className="guild_title">
           {guild?.name}
         </button>
 
         <div className={`guild_title_dropdown ${open ? "active" : "closed"}`}>
           <div className="dropdown_content">
             <button className="dropdown_btn">Server Settings</button>
-            <button
-              onClick={() => openModal("create-channel-modal")}
-              className="dropdown_btn"
-            >
+            <button onClick={() => openModal("create-channel-modal")} className="dropdown_btn">
               Create Channel
             </button>
-            <button
-              onClick={() => openModal("create-category-modal")}
-              className="dropdown_btn"
-            >
+            <button onClick={() => openModal("create-category-modal")} className="dropdown_btn">
               Create Category
             </button>
-            <button
-              onClick={() => deleteGuildById(guild?._id!)}
-              className="dropdown_btn danger"
-            >
+            <button onClick={() => deleteGuildById(guild?._id!)} className="dropdown_btn danger">
               Delete guild
             </button>
           </div>
         </div>
       </div>
       <div className="channel_info">
-        <HashIcon />{" "}
-        <span className="channel_name">{channel?.name?.toLowerCase()}</span>
+        <HashIcon /> <span className="channel_name">{channel?.name?.toLowerCase()}</span>
         {channel?.topic !== null ? (
           <>
             {/* TODO: add modal here for topic */}
             <div className="channel_name_divider"></div>{" "}
-            <button onClick={() => openModal("topic-modal")}>
-              {channel?.topic}
-            </button>
+            <button onClick={() => openModal("topic-modal")}>{channel?.topic}</button>
           </>
         ) : null}
       </div>
