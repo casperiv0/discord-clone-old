@@ -3,37 +3,41 @@ import { connect } from "react-redux";
 import State from "../../interfaces/State";
 import Modal from "./index";
 import { createChannel } from "../../lib/actions/channel";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { getGuildById } from "../../lib/actions/guild";
 import ErrorMessage from "../error-message";
 import { parseChannelName } from "../../utils/utils";
+import Loader from "../loader";
 
 interface Props {
   error: string | null;
-  createChannel: (name: string, guildId: string) => void;
+  createChannel: (name: string, guildId: string) => Promise<string | undefined>;
   getGuildById: (id: string) => void;
 }
 
 const CreateChannelModal: React.FC<Props> = ({ error, createChannel, getGuildById }) => {
   const [chName, setName] = React.useState<string>("");
+  const [state, setState] = React.useState<string | null>(null);
   const params = useParams<{ guild_id: string }>();
+  const history = useHistory();
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setState("loading");
 
-    createChannel(chName, params.guild_id);
-
-    setName("");
-
-    setTimeout(() => {
-      getGuildById(params.guild_id);
-    }, 500);
+    const channelId = await createChannel(chName, params.guild_id);
+    if (!channelId) {
+      setState("error");
+    } else {
+      setName("");
+      history.push(`/channels/${params.guild_id}/${channelId}`);
+    }
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
 
-    setName(parseChannelName(value));
+    setName(parseChannelName(value?.toLowerCase()));
   }
 
   return (
@@ -56,7 +60,7 @@ const CreateChannelModal: React.FC<Props> = ({ error, createChannel, getGuildByI
       </div>
       <div className="modal_footer">
         <button form="create_channel_form" className="btn blue">
-          Create Channel
+          {state === "loading" ? <Loader /> : "Create Channel"}
         </button>
       </div>
     </Modal>

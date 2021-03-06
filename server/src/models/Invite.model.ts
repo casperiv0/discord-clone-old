@@ -1,29 +1,24 @@
 import { model, Schema, Document } from "mongoose";
 import Author from "../interfaces/Author";
 
-export interface Message extends Document {
-  content: string;
-  guild_id: string;
+export interface Invite extends Document {
+  code: string;
   created_at: number;
-  channel_id: string;
   author: Author;
+  guild_id: string;
 }
 
-const MessageSchema = new Schema({
-  content: {
-    type: String,
-    required: true,
-  },
-  guild_id: {
-    type: String,
-    required: true,
-  },
-  channel_id: {
+const InviteSchema = new Schema({
+  code: {
     type: String,
     required: true,
   },
   author: {
     type: Object,
+    required: true,
+  },
+  guild_id: {
+    type: String,
     required: true,
   },
   created_at: {
@@ -32,4 +27,4 @@ const MessageSchema = new Schema({
   },
 });
 
-export default model<Message>("Message", MessageSchema);
+export default model<Invite>("Invite", InviteSchema);

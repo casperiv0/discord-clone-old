@@ -2,12 +2,10 @@
 
 A full stack [Discord](https://discord.com) clone using TypeScript, React and express. WIP
 
-## Todos
+## why
 
-Pretty much everything is still do be done, but the most important things:
+I wanted to learn more about TypeScript, scss and web sockets
 
-- [ ] Permissions
-- [ ] setup web sockets
-- [ ] messages panel + routes
-- [ ] members list + routes
-- ...
+## demo
+
+soon™

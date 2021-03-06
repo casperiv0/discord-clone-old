@@ -7,7 +7,9 @@ import App from "./App";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <React.Suspense fallback={<p>Loading...</p>}>
+      <App />
+    </React.Suspense>
   </React.StrictMode>,
   document.getElementById("app-mount"),
 );

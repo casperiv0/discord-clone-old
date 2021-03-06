@@ -18,6 +18,23 @@
   }
 }
 
+.start-of-channel {
+  margin: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #4b4d53;
+
+  h1 {
+    color: $white;
+    margin-bottom: 0.2rem;
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: $light-gray;
+    font-weight: 500;
+  }
+}
+
 .message-item {
   width: 100%;
   display: flex;
@@ -45,6 +62,7 @@
 
   .content {
     margin-left: 0.5rem;
+    width: 100%;
 
     header {
       width: max-content;
@@ -88,6 +106,10 @@
       background: transparent;
       transition: background 150ms;
 
+      svg {
+        fill: $light-gray;
+      }
+
       &.delete {
         svg {
           fill: $red;
@@ -98,6 +120,18 @@
         background: $dark-gray;
       }
     }
+  }
+
+  .edit-message-input {
+    padding: 0.6rem 1rem;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+    border: none;
+    background: $blue-gray;
+    color: $white;
+    width: 100%;
+    outline: none;
+    font-size: 1.1rem;
   }
 
   &:hover {

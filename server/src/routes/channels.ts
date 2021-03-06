@@ -1,6 +1,7 @@
 import { Router, Response } from "express";
 import slugify from "slugify";
 import { useAuth } from "../hooks";
+import useValidObjectId from "../hooks/useValidObjectId";
 import IRequest from "../interfaces/IRequest";
 import ChannelModel from "../models/Channel.model";
 import GuildModel from "../models/Guild.model";
@@ -11,8 +12,9 @@ import { errorObj } from "../utils/utils";
 
 const router = Router();
 
-router.post("/", useAuth, async (req: IRequest, res: Response) => {
-  const { guild_id, type } = req.query;
+router.post("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: IRequest, res: Response) => {
+  const { type } = req.query;
+  const { guild_id } = req.params;
   const { name, parent_id } = req.body;
 
   if (!guild_id) {
@@ -65,145 +67,141 @@ router.post("/", useAuth, async (req: IRequest, res: Response) => {
   return res.json({ status: "success", channel_id: newChannel._id });
 });
 
-router.get("/:channel_id", useAuth, async (req: IRequest, res: Response) => {
-  const { channel_id } = req.params;
-  const { guild_id } = req.query;
+router.get(
+  "/:guild_id/:channel_id",
+  useValidObjectId("guild_id", "channel_id"),
+  useAuth,
+  async (req: IRequest, res: Response) => {
+    const { channel_id, guild_id } = req.params;
 
-  if (channel_id === "undefined" || !channel_id) {
-    return res.json(errorObj("You must provide a channel_id"));
-  }
-
-  if (!guild_id) {
-    return res.json(errorObj("You must provide a guild_id"));
-  }
-
-  const user = await UserModel.findById(req.user);
-  if (!user) {
-    return res.json(errorObj("User was not found"));
-  }
-
-  if (!user.guilds.includes(String(guild_id))) {
-    return res.json(errorObj("User is not in this guild")).status(401);
-  }
-
-  const channel = await ChannelModel.findById(String(channel_id));
-
-  if (!channel) {
-    return res.json(errorObj("Channel was not found"));
-  }
-
-  if (channel?.guild_id.toString() !== guild_id) {
-    return res.json(errorObj("Guild id's do not match"));
-  }
-
-  return res.json({ status: "success", channel: channel });
-});
-
-router.put("/:channel_id", useAuth, async (req: IRequest, res: Response) => {
-  const { channel_id } = req.params;
-  const { guild_id } = req.query;
-  const { topic, name } = req.body;
-
-  if (!name) {
-    return res.json(errorObj("You must provide a name"));
-  }
-
-  if (name.length > 25) {
-    return res.json(errorObj("Channel name cannot be longer than 25 characters")).status(400);
-  }
-
-  if (topic && topic.length > 1024) {
-    return res.json(errorObj("Channel topic cannot be longer than 1024 characters")).status(400);
-  }
-
-  if (!guild_id) {
-    return res.json(errorObj("You must provide a `guild_id`"));
-  }
-
-  const user = await UserModel.findById(req.user);
-  const channel = await ChannelModel.findById(channel_id);
-
-  if (!user) {
-    return res.json(errorObj("User was not found"));
-  }
-
-  if (!channel) {
-    return res.json(errorObj("Channel was not found"));
-  }
-
-  if (!user.guilds.includes(String(guild_id))) {
-    return res.json(errorObj("User is not in this guild")).status(401);
-  }
-
-  try {
-    await ChannelModel.findByIdAndUpdate(channel?._id, {
-      name: name,
-      topic: topic,
-    });
-  } catch (e) {
-    logger.error("UPDATE_CHANNEL", e);
-  }
-
-  return res.json({ status: "success" });
-});
-
-router.delete("/:channel_id", useAuth, async (req: IRequest, res: Response) => {
-  const { channel_id } = req.params;
-  const { guild_id } = req.query;
-
-  if (!guild_id) {
-    return res.json(errorObj("You must provide a `guild_id`"));
-  }
-
-  const guild = await GuildModel.findById(guild_id);
-  const user = await UserModel.findById(req.user);
-  const channel = await ChannelModel.findById(channel_id);
-
-  if (!user) {
-    return res.json(errorObj("User was not found"));
-  }
-
-  if (!user.guilds.includes(String(guild_id))) {
-    return res.json(errorObj("User is not in this guild")).status(401);
-  }
-
-  switch (channel?.type) {
-    case 1: {
-      if (!guild?.channel_ids.includes(channel_id)) {
-        return res.json(errorObj("Channel does not exist in this guild"));
-      }
-      break;
+    const user = await UserModel.findById(req.user);
+    if (!user) {
+      return res.json(errorObj("User was not found"));
     }
-    case 2: {
-      if (!guild?.category_ids.includes(channel_id)) {
-        return res.json(errorObj("Category does not exist in this guild"));
-      }
-      break;
-    }
-    default: {
-      return res.json(errorObj("Type was invalid"));
-    }
-  }
 
-  try {
-    await MessageModel.deleteMany({ guild_id: guild._id, channel_id: channel._id });
-    await ChannelModel.findByIdAndDelete(channel?._id);
+    if (!user.guilds.includes(String(guild_id))) {
+      return res.json(errorObj("User is not in this guild")).status(401);
+    }
 
-    if (channel?.type === 1) {
-      await GuildModel.findByIdAndUpdate(guild?._id, {
-        channel_ids: guild.channel_ids.filter((id) => id !== channel_id),
+    const channel = await ChannelModel.findById(String(channel_id));
+
+    if (!channel) {
+      return res.json(errorObj("Channel was not found"));
+    }
+
+    if (channel?.guild_id.toString() !== guild_id) {
+      return res.json(errorObj("Guild id's do not match"));
+    }
+
+    return res.json({ status: "success", channel: channel });
+  },
+);
+
+router.put(
+  "/:guild_id/:channel_id",
+  useValidObjectId("guild_id", "channel_id"),
+  useAuth,
+  async (req: IRequest, res: Response) => {
+    const { channel_id, guild_id } = req.params;
+    const { topic, name } = req.body;
+
+    if (!name) {
+      return res.json(errorObj("You must provide a name"));
+    }
+
+    if (name.length > 25) {
+      return res.json(errorObj("Channel name cannot be longer than 25 characters")).status(400);
+    }
+
+    if (topic && topic.length > 1024) {
+      return res.json(errorObj("Channel topic cannot be longer than 1024 characters")).status(400);
+    }
+
+    const user = await UserModel.findById(req.user);
+    const channel = await ChannelModel.findById(channel_id);
+
+    if (!user) {
+      return res.json(errorObj("User was not found"));
+    }
+
+    if (!channel) {
+      return res.json(errorObj("Channel was not found"));
+    }
+
+    if (!user.guilds.includes(String(guild_id))) {
+      return res.json(errorObj("User is not in this guild")).status(401);
+    }
+
+    try {
+      await ChannelModel.findByIdAndUpdate(channel?._id, {
+        name: name,
+        topic: topic,
       });
-    } else {
-      await GuildModel.findByIdAndUpdate(guild?._id, {
-        category_ids: guild.category_ids.filter((id) => id !== channel_id),
-      });
+    } catch (e) {
+      logger.error("UPDATE_CHANNEL", e);
     }
-  } catch (e) {
-    logger.error("delete_channel", e);
-    return res.json(errorObj("An unexpected error occurred, please try again later")).status(500);
-  }
 
-  return res.json({ status: "success" });
-});
+    return res.json({ status: "success" });
+  },
+);
+
+router.delete(
+  "/:guild_id/:channel_id",
+  useValidObjectId("guild_id", "channel_id"),
+  useAuth,
+  async (req: IRequest, res: Response) => {
+    const { channel_id, guild_id } = req.params;
+
+    const guild = await GuildModel.findById(guild_id);
+    const user = await UserModel.findById(req.user);
+    const channel = await ChannelModel.findById(channel_id);
+
+    if (!user) {
+      return res.json(errorObj("User was not found"));
+    }
+
+    if (!user.guilds.includes(String(guild_id))) {
+      return res.json(errorObj("User is not in this guild")).status(401);
+    }
+
+    switch (channel?.type) {
+      case 1: {
+        if (!guild?.channel_ids.includes(channel_id)) {
+          return res.json(errorObj("Channel does not exist in this guild"));
+        }
+        break;
+      }
+      case 2: {
+        if (!guild?.category_ids.includes(channel_id)) {
+          return res.json(errorObj("Category does not exist in this guild"));
+        }
+        break;
+      }
+      default: {
+        return res.json(errorObj("Type was invalid"));
+      }
+    }
+
+    try {
+      await MessageModel.deleteMany({ guild_id: guild._id, channel_id: channel._id });
+      await ChannelModel.findByIdAndDelete(channel?._id);
+
+      if (channel?.type === 1) {
+        await GuildModel.findByIdAndUpdate(guild?._id, {
+          channel_ids: guild.channel_ids.filter((id) => id !== channel_id),
+        });
+      } else {
+        await GuildModel.findByIdAndUpdate(guild?._id, {
+          category_ids: guild.category_ids.filter((id) => id !== channel_id),
+        });
+      }
+    } catch (e) {
+      logger.error("delete_channel", e);
+      return res.json(errorObj("An unexpected error occurred, please try again later")).status(500);
+    }
+
+    return res.json({ status: "success" });
+  },
+);
 
 export default router;

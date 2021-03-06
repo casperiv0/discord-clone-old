@@ -11,6 +11,7 @@ import TopicModal from "../../components/modals/TopicModal";
 import NavBar from "../../components/navbar";
 import { getChannelById } from "../../lib/actions/channel";
 import { getGuildById, getUserGuilds } from "../../lib/actions/guild";
+import { joinChannel } from "../../lib/socket";
 
 interface Props {
   getUserGuilds: () => void;
@@ -20,6 +21,10 @@ interface Props {
 
 const GuildPage: React.FC<Props> = ({ getUserGuilds, getGuildById, getChannelById }) => {
   const match = useParams<{ channel_id: string; guild_id: string }>();
+
+  React.useEffect(() => {
+    joinChannel(match.guild_id, match.channel_id);
+  }, [match]);
 
   React.useEffect(() => {
     getUserGuilds();

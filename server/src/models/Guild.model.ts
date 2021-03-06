@@ -10,6 +10,11 @@ export interface Guild extends Document {
   category_ids: string[];
   channels?: unknown[];
   categories?: unknown[];
+
+  /**
+   * @requires first element = ownerId
+   */
+  member_ids: string[];
 }
 
 const GuildSchema = new Schema({
@@ -41,6 +46,10 @@ const GuildSchema = new Schema({
   created_at: {
     type: Number,
     default: () => Date.now(),
+  },
+  member_ids: {
+    type: Array,
+    required: true,
   },
 });
 

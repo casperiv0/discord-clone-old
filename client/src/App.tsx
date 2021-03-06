@@ -13,17 +13,15 @@ const ChannelSettingsPage = React.lazy(() => import("./pages/channel-settings"))
 const App: React.FC = () => {
   return (
     <Router>
-      <React.Suspense fallback={<p>Loading...</p>}>
-        <Provider store={store}>
-          <Switch>
-            <Route path="/login" exact component={LoginPage} />
-            <Route path="/register" exact component={RegisterPage} />
+      <Provider store={store}>
+        <Switch>
+          <Route path="/login" exact component={LoginPage} />
+          <Route path="/register" exact component={RegisterPage} />
 
-            <AuthRoute path="/channels/:guild_id/:channel_id/settings" component={ChannelSettingsPage} />
-            <AuthRoute path="/channels/:guild_id/:channel_id" component={GuildPage} />
-          </Switch>
-        </Provider>
-      </React.Suspense>
+          <AuthRoute path="/channels/:guild_id/:channel_id/settings" component={ChannelSettingsPage} />
+          <AuthRoute path="/channels/:guild_id/:channel_id" component={GuildPage} />
+        </Switch>
+      </Provider>
     </Router>
   );
 };

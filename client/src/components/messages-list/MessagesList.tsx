@@ -8,16 +8,17 @@ import CreateMessageContainer from "../create-message";
 import MessageItem from "./MessageItem";
 import Loader from "../loader";
 import "./styles.scss";
+import { Channel } from "../../interfaces/Guild";
 
 interface Props {
   messages: Message[];
   loading: boolean;
   guildId: string | undefined;
-  channelId: string | undefined;
+  channel: Channel | null;
   getMessages: (guildId: string, channelId: string) => void;
 }
 
-const MessagesList: React.FC<Props> = ({ messages: ApiMessages, guildId, channelId, loading, getMessages }) => {
+const MessagesList: React.FC<Props> = ({ messages: ApiMessages, guildId, channel, loading, getMessages }) => {
   const [messages, setMessages] = React.useState<Message[]>(ApiMessages);
   const setScrollTop = React.useCallback(() => {
     const messagesContainer = document.querySelector(".messages");
@@ -50,10 +51,10 @@ const MessagesList: React.FC<Props> = ({ messages: ApiMessages, guildId, channel
 
   React.useEffect(() => {
     if (!guildId) return;
-    if (!channelId) return;
+    if (!channel?._id) return;
 
-    getMessages(guildId, channelId);
-  }, [getMessages, guildId, channelId]);
+    getMessages(guildId, channel._id);
+  }, [getMessages, guildId, channel?._id]);
 
   return (
     <div className="messages_list">
@@ -63,6 +64,10 @@ const MessagesList: React.FC<Props> = ({ messages: ApiMessages, guildId, channel
         </div>
       ) : (
         <div className="messages">
+          <div className="start-of-channel">
+            <h1>Welcome to #{channel?.name}</h1>
+            <p>This is the start of the #{channel?.name} channel</p>
+          </div>
           {messages
             .sort((a, b) => a.created_at - b.created_at)
             .map((message) => {
@@ -79,7 +84,7 @@ const mapToProps = (state: State) => ({
   messages: state.message.messages,
   loading: state.message.loading,
   guildId: state.guild.guild?._id,
-  channelId: state.channel.channel?._id,
+  channel: state.channel.channel,
 });
 
 export default connect(mapToProps, { getMessages })(MessagesList);

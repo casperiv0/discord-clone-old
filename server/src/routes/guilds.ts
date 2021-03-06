@@ -1,5 +1,6 @@
 import { Router, Response } from "express";
 import { useAuth } from "../hooks";
+import useValidObjectId from "../hooks/useValidObjectId";
 import IRequest from "../interfaces/IRequest";
 import ChannelModel, { Channel } from "../models/Channel.model";
 import GuildModel, { Guild } from "../models/Guild.model";
@@ -64,7 +65,7 @@ router.get("/", useAuth, async (req: IRequest, res: Response) => {
   }
 });
 
-router.get("/:guild_id", useAuth, async (req: IRequest, res: Response) => {
+router.get("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: IRequest, res: Response) => {
   const { guild_id } = req.params;
   const user = await UserModel.findById(req.user);
   const channelData = await ChannelModel.find();
@@ -102,6 +103,7 @@ router.post("/", useAuth, async (req: IRequest, res: Response) => {
     const newGuild = await GuildModel.create({
       name,
       owner_id: `${req.user}`,
+      member_ids: [`${req.user?.toString()}`],
     });
 
     const category = await new ChannelModel({
@@ -109,9 +111,6 @@ router.post("/", useAuth, async (req: IRequest, res: Response) => {
       name: "General",
       guild_id: `${newGuild._id}`,
     }).save();
-
-    console.log(category);
-    console.log(newGuild);
 
     const channel = new ChannelModel({
       parent_id: `${category._id}`,
@@ -142,7 +141,7 @@ router.post("/", useAuth, async (req: IRequest, res: Response) => {
   }
 });
 
-router.delete("/:guild_id", useAuth, async (req: IRequest, res: Response) => {
+router.delete("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: IRequest, res: Response) => {
   const { guild_id } = req.params;
 
   try {

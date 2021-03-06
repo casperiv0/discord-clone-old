@@ -1,5 +1,11 @@
 import * as React from "react";
-import { CREATE_MESSAGE, DELETE_MESSAGE_BY_ID, GET_MESSAGES_FOR_CHANNEL, SET_FETCHING_MSGS } from "../types";
+import {
+  CREATE_MESSAGE,
+  DELETE_MESSAGE_BY_ID,
+  GET_MESSAGES_FOR_CHANNEL,
+  SET_FETCHING_MSGS,
+  UPDATE_MESSAGE_BY_ID,
+} from "../types";
 import Message from "../../interfaces/Message";
 import Logger from "../../utils/Logger";
 import { handleRequest, isSuccess } from "../../utils/utils";
@@ -50,6 +56,26 @@ export const createMessage = (message: string, guildId: string, channelId: strin
     }
   } catch (e) {
     Logger.error("CREATE_MESSAGE", e);
+    return false;
+  }
+};
+
+export const updateMessageById = (messageId: string, channelId: string, guildId: string, content: string) => async (
+  dispatch: React.Dispatch<IDispatch>,
+): Promise<boolean> => {
+  try {
+    const res = await handleRequest(`/message/${guildId}/${channelId}/${messageId}`, "PUT", { content });
+
+    if (isSuccess(res)) {
+      dispatch({
+        type: UPDATE_MESSAGE_BY_ID,
+      });
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    Logger.error(UPDATE_MESSAGE_BY_ID, e);
     return false;
   }
 };

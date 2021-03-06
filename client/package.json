@@ -20,7 +20,8 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "socket.io-client": "^3.1.2",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.3",
+    "use-key-event": "^0.0.5"
   },
   "scripts": {
     "dev": "react-scripts start",
