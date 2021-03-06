@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import ErrorMessage from "../../components/error-message";
 import XIcon from "../../components/icons/XIcon";
-import { Channel } from "../../interfaces/Guild";
+import Guild, { Channel } from "../../interfaces/Guild";
 import State from "../../interfaces/State";
 import { deleteChannelById, getChannelById, updateChannel } from "../../lib/actions/channel";
 import { parseChannelName } from "../../utils/utils";
@@ -12,7 +12,7 @@ import "./styles.scss";
 interface Props {
   error: string | null;
   channel: Channel | null;
-  guildId: string | undefined;
+  guild: Guild | null;
   getChannelById: (channelId: string, guildId: string) => void;
   deleteChannelById: (channelId: string, guildId: string) => Promise<boolean>;
   updateChannel: (channelId: string, guildId: string, data: unknown) => void;
@@ -21,7 +21,7 @@ interface Props {
 const ChannelSettingsPage: React.FC<Props> = ({
   channel,
   error,
-  guildId,
+  guild,
   getChannelById,
   updateChannel,
   deleteChannelById,
@@ -60,11 +60,11 @@ const ChannelSettingsPage: React.FC<Props> = ({
 
   async function deleteChannel() {
     if (!channel) return;
-    if (!guildId) return;
-    const deleted = await deleteChannelById(channel?._id, guildId);
+    if (!guild) return;
+    const deleted = await deleteChannelById(channel?._id, guild?._id);
 
     if (deleted) {
-      history.push(`/channels/${guildId}/null`);
+      history.push(`/channels/${guild._id}/${guild.channel_ids[0]}`);
     }
   }
 
@@ -128,7 +128,7 @@ const ChannelSettingsPage: React.FC<Props> = ({
 const mapToProps = (state: State) => ({
   channel: state.channel.channel,
   error: state.channel.error,
-  guildId: state.guild.guild?._id,
+  guild: state.guild.guild,
 });
 
 export default connect(mapToProps, { getChannelById, updateChannel, deleteChannelById })(ChannelSettingsPage);

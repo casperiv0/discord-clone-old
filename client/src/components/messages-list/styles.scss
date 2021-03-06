@@ -75,6 +75,7 @@
     background: $light-black;
     border-radius: 0.5rem;
     overflow: hidden;
+    box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.2);
 
     .message-action {
       display: grid;
@@ -85,6 +86,7 @@
       font-size: 1.2rem;
       cursor: pointer;
       background: transparent;
+      transition: background 150ms;
 
       &.delete {
         svg {
