@@ -1,5 +1,7 @@
 import { model, Schema, Document } from "mongoose";
 
+export type Permissions = "ADMIN" | "MANAGE_GUILD";
+
 export interface Guild extends Document {
   name: string;
   owner_id: string;
@@ -14,7 +16,12 @@ export interface Guild extends Document {
   /**
    * @requires first element = ownerId
    */
-  member_ids: string[];
+  member_ids: Member[];
+}
+
+export interface Member {
+  user_id: string;
+  permissions: Permissions[];
 }
 
 const GuildSchema = new Schema({
@@ -25,7 +32,7 @@ const GuildSchema = new Schema({
   },
   owner_id: {
     type: String,
-    default: null, // TODO: change this
+    required: true,
   },
   region: {
     type: String,

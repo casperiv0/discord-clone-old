@@ -135,7 +135,12 @@ router.post("/", useAuth, async (req: IRequest, res: Response) => {
     const newGuild = await GuildModel.create({
       name,
       owner_id: `${req.user}`,
-      member_ids: [`${req.user?.toString()}`],
+      member_ids: [
+        {
+          user_id: `${req.user?.toString()}`,
+          permissions: ["ADMIN", "MANAGE_GUILD"],
+        },
+      ],
     });
 
     const category = await new ChannelModel({

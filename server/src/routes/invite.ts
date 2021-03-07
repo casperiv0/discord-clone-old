@@ -88,7 +88,15 @@ router.post("/code/:invite_code", useAuth, async (req: IRequest, res: Response) 
     }
 
     await UserModel.findByIdAndUpdate(user._id, { guilds: [...user.guilds, invite.guild_id] });
-    await GuildModel.findByIdAndUpdate(guild._id, { member_ids: [...guild.member_ids, req.user!] });
+    await GuildModel.findByIdAndUpdate(guild._id, {
+      member_ids: [
+        ...guild.member_ids,
+        {
+          user_id: req.user!,
+          permissions: [],
+        },
+      ],
+    });
 
     return res.json({
       status: "success",

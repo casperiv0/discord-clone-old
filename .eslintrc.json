@@ -45,10 +45,17 @@
     {
       "files": ["**/*.tsx", "**/*.ts"],
       "rules": {
-        "quotes": "off",
         "no-unused-vars": "off",
         "react/prop-types": "off",
         "react/display-name": "off"
+      }
+    },
+    {
+      "files": ["./server/**/*.ts"],
+      "rules": {
+        "react-hooks/rules-of-hooks": "off",
+        "react-hooks/exhaustive-deps": "off",
+        "react/react-in-jsx-scope": "off"
       }
     }
   ],
