@@ -8,7 +8,8 @@
     "prettier:fix": "prettier --write .",
     "client": "npm run dev --prefix client",
     "server": "npm run dev --prefix server",
-    "dev": "concurrently 'npm run client' 'npm run server'"
+    "dev": "concurrently 'npm run client' 'npm run server'",
+    "build:client": "npm run build --prefix client"
   },
   "repository": {
     "type": "git",
@@ -34,6 +35,7 @@
   },
   "homepage": "https://github.com/Dev-CasperTheGhost/discord-clone#readme",
   "dependencies": {
-    "concurrently": "^6.0.0"
+    "concurrently": "^6.0.0",
+    "typescript": "^4.2.3"
   }
 }

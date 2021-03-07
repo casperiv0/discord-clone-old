@@ -13,13 +13,10 @@ const router = Router();
 function returnGuildChannels(guild: Guild, channelData: Channel[]) {
   const channels = [];
 
-  for (let i = 0; i < guild.category_ids.length; i++) {
-    const category = channelData.find((ch) => ch._id.toString() === guild.category_ids[i]);
-    const data = channelData.filter((ch) => ch.parent_id === guild.category_ids[i]);
+  for (let i = 0; i < guild.channel_ids.length; i++) {
+    const channel = channelData.find((ch) => ch._id.toString() === guild.channel_ids[i]);
 
-    channels.push((category as any)?._doc);
-
-    data.forEach((ch) => channels.push(ch));
+    channels.push(channel);
   }
 
   const noCateChannels = channelData.filter(
@@ -165,8 +162,7 @@ router.post("/", useAuth, async (req: IRequest, res: Response) => {
 
     user.guilds = [...user.guilds, newGuild._id.toString()];
 
-    newGuild.channel_ids = [channel._id?.toString()];
-    newGuild.category_ids = [category._id?.toString()];
+    newGuild.channel_ids = [category._id?.toString(), channel._id?.toString()];
     await newGuild.save();
     await user.save();
 

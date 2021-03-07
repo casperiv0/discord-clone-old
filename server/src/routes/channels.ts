@@ -49,21 +49,7 @@ router.post("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: IRe
     return res.json(errorObj("Guild was not found")).status(404);
   }
 
-
-  // TODO: merge this together into `channel_ids`
-  switch (type) {
-    case "1": {
-      guild.channel_ids = [...guild.channel_ids, newChannel._id.toString()];
-      break;
-    }
-    case "2": {
-      guild.category_ids = [...guild.category_ids, newChannel._id.toString()];
-      break;
-    }
-    default: {
-      return res.json(errorObj("Invalid type was provided")).status(400);
-    }
-  }
+  guild.channel_ids = [...guild.channel_ids, newChannel._id.toString()];
 
   try {
     await newChannel.save();
