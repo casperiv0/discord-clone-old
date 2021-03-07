@@ -87,4 +87,6 @@ const mapToProps = (state: State) => ({
   channel: state.channel.channel,
 });
 
-export default connect(mapToProps, { getMessages })(MessagesList);
+const Memoized = React.memo(MessagesList);
+
+export default connect(mapToProps, { getMessages })(Memoized);

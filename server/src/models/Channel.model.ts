@@ -37,6 +37,10 @@ const ChannelSchema = new Schema({
     type: Number,
     required: true,
   },
+  position: {
+    type: Number,
+    required: true,
+  },
   created_at: {
     type: Number,
     default: () => Date.now(),

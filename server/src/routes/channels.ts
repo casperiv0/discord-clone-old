@@ -29,11 +29,18 @@ router.post("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: IRe
     return res.json(errorObj("Channel name cannot be longer than 25 characters")).status(400);
   }
 
+  const allChannels = await ChannelModel.find({ guild_id: guild_id });
+  const filteredChannels = allChannels.filter((c) =>
+    c.type === 1 && c.parent_id === parent_id ? parent_id : "no_parent",
+  );
+
   const newChannel = new ChannelModel({
     name: type === "1" ? slugify(name, { replacement: "-", lower: true }) : name,
     guild_id,
     type: Number(type),
     parent_id: type === "1" ? parent_id : "no_parent",
+    // TODO: this isn't correct
+    position: Number(type) === 1 ? filteredChannels.length - 1 : allChannels.length - 1,
   });
 
   const guild = await GuildModel.findById(guild_id);
@@ -42,6 +49,8 @@ router.post("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: IRe
     return res.json(errorObj("Guild was not found")).status(404);
   }
 
+
+  // TODO: merge this together into `channel_ids`
   switch (type) {
     case "1": {
       guild.channel_ids = [...guild.channel_ids, newChannel._id.toString()];
@@ -103,7 +112,7 @@ router.put(
   useAuth,
   async (req: IRequest, res: Response) => {
     const { channel_id, guild_id } = req.params;
-    const { topic, name } = req.body;
+    const { topic, name, position } = req.body;
 
     if (!name) {
       return res.json(errorObj("You must provide a name"));
@@ -134,8 +143,9 @@ router.put(
 
     try {
       await ChannelModel.findByIdAndUpdate(channel?._id, {
-        name: name,
-        topic: topic,
+        name,
+        topic,
+        position,
       });
     } catch (e) {
       logger.error("UPDATE_CHANNEL", e);

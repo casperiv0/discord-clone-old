@@ -9,10 +9,6 @@ interface Guild {
   category_ids: string[];
   channels: Channel[] | null;
   created_at: number;
-  categories: {
-    categoryChannels: Category[];
-    noCategoryChannels: Category[];
-  };
 
   member_ids: string;
   members: User[];
@@ -30,6 +26,8 @@ export interface Channel {
   topic: string;
   nsfw: boolean;
   created_at: number;
+  type: number;
+  position: number;
 }
 
 export default Guild;

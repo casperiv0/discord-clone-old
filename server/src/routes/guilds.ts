@@ -11,26 +11,24 @@ import { errorObj } from "../utils/utils";
 const router = Router();
 
 function returnGuildChannels(guild: Guild, channelData: Channel[]) {
-  const categoryChannels = [];
-  const noCategoryChannels = [];
+  const channels = [];
 
   for (let i = 0; i < guild.category_ids.length; i++) {
     const category = channelData.find((ch) => ch._id.toString() === guild.category_ids[i]);
     const data = channelData.filter((ch) => ch.parent_id === guild.category_ids[i]);
 
-    categoryChannels.push({
-      channels: data,
-      ...(category as any)?._doc,
-    });
+    channels.push((category as any)?._doc);
+
+    data.forEach((ch) => channels.push(ch));
   }
 
   const noCateChannels = channelData.filter(
     (ch) => ch.parent_id === "no_parent" && ch?.type === 1 && ch?.guild_id === guild._id.toString(),
   );
 
-  noCategoryChannels.push({ channels: noCateChannels });
+  noCateChannels.forEach((ch) => channels.push(ch));
 
-  return { categoryChannels, noCategoryChannels };
+  return channels;
 }
 
 router.get("/", useAuth, async (req: IRequest, res: Response) => {
@@ -88,7 +86,7 @@ router.get("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: IReq
 
   return res.json({
     status: "success",
-    guild: { ...(guild as any)._doc, categories: categories },
+    guild: { ...(guild as any)._doc, channels: categories },
   });
 });
 
@@ -147,6 +145,7 @@ router.post("/", useAuth, async (req: IRequest, res: Response) => {
       type: 2,
       name: "General",
       guild_id: `${newGuild._id}`,
+      position: 0,
     }).save();
 
     const channel = new ChannelModel({
@@ -154,6 +153,7 @@ router.post("/", useAuth, async (req: IRequest, res: Response) => {
       type: 1,
       name: "General",
       guild_id: `${newGuild._id}`,
+      position: 1,
     });
     await channel.save();
 
