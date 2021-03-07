@@ -170,7 +170,7 @@ router.post("/", useAuth, async (req: IRequest, res: Response) => {
     await newGuild.save();
     await user.save();
 
-    return res.json({ status: "success", guild_id: newGuild._id });
+    return res.json({ status: "success", guild_id: newGuild._id, channel_id: channel._id });
   } catch (e) {
     logger.error("create_guild", e);
 

@@ -25,6 +25,7 @@ const MemberItem: React.FC<{ member: User }> = ({ member }) => {
   function handleShowPopup() {
     setShowPopup((v) => !v);
   }
+
   return (
     <>
       {showPopup ? <UserPopup side="right" handleHidePopup={() => setShowPopup(false)} user={member} /> : null}

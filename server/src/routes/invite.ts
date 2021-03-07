@@ -93,6 +93,7 @@ router.post("/code/:invite_code", useAuth, async (req: IRequest, res: Response) 
     return res.json({
       status: "success",
       guildId: guild?._id,
+      channelId: guild.channel_ids[0],
     });
   } catch (e) {
     logger.error("GET_INVITE_CODE", e);

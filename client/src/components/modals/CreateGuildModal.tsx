@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { useHistory } from "react-router";
 import State from "../../interfaces/State";
 import User from "../../interfaces/User";
-import { createGuild, joinGuild } from "../../lib/actions/guild";
+import { createGuild, joinGuild, ReturnGuildType } from "../../lib/actions/guild";
 import { closeModal } from "../../utils/utils";
 import ErrorMessage from "../error-message";
 import Loader from "../loader";
@@ -13,8 +13,8 @@ interface Props {
   error: string | null;
   user: User | null;
   guild_id: string | undefined;
-  createGuild: (data: unknown) => Promise<string | undefined>;
-  joinGuild: (code: string) => Promise<boolean>;
+  createGuild: (data: unknown) => Promise<ReturnGuildType | undefined>;
+  joinGuild: (code: string) => Promise<ReturnGuildType | undefined>;
 }
 
 const CreateGuildModal: React.FC<Props> = ({ user, error, guild_id, createGuild, joinGuild }) => {
@@ -35,19 +35,19 @@ const CreateGuildModal: React.FC<Props> = ({ user, error, guild_id, createGuild,
     e.preventDefault();
     setState("loading");
 
-    let guildId: unknown = "";
+    let data: ReturnGuildType | undefined;
     if (type === "create") {
-      guildId = await createGuild({ name });
+      data = await createGuild({ name });
     } else if (type === "join") {
       if (!guild_id) return;
-      guildId = await joinGuild(name);
+      data = await joinGuild(name);
     }
 
-    if (guildId) {
+    if (data?.guildId) {
       closeModal("create-guild-modal");
 
       setState(null);
-      return history.push(`/channels/${guildId}/null`);
+      return history.push(`/channels/${data.guildId}/${data.channelId}`);
     } else {
       setState("error");
     }

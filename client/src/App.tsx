@@ -5,6 +5,7 @@ import AuthRoute from "./components/AuthRoute";
 import store from "./lib/store";
 import "./lib/socket";
 
+const IndexPage = React.lazy(() => import("./pages/index"));
 const LoginPage = React.lazy(() => import("./pages/auth/login"));
 const RegisterPage = React.lazy(() => import("./pages/auth/register"));
 const GuildPage = React.lazy(() => import("./pages/guild"));
@@ -16,6 +17,7 @@ const App: React.FC = () => {
     <Router>
       <Provider store={store}>
         <Switch>
+          <Route path="/" exact component={IndexPage} />
           <Route path="/login" exact component={LoginPage} />
           <Route path="/register" exact component={RegisterPage} />
 

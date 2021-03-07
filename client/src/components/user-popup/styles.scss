@@ -53,9 +53,10 @@
   }
 
   &.right {
-    top: 10px;
-    right: 95%;
+    top: 0;
+    right: 101%;
     margin-right: 0.5rem;
+    animation: fadeInRight 200ms;
   }
 
   &.active {
@@ -67,6 +68,17 @@
   from {
     opacity: 0;
     transform: translate(0.8rem);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translate(-0.8rem);
   }
   to {
     opacity: 1;

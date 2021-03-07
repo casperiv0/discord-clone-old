@@ -19,9 +19,14 @@ interface IDispatch {
   loading?: boolean;
 }
 
+export interface ReturnGuildType {
+  guildId: string;
+  channelId: string;
+}
+
 export const createGuild = (data: unknown) => async (
   dispatch: React.Dispatch<IDispatch>,
-): Promise<string | undefined> => {
+): Promise<ReturnGuildType | undefined> => {
   try {
     const res = await handleRequest("/guilds", "POST", data);
 
@@ -30,7 +35,10 @@ export const createGuild = (data: unknown) => async (
         type: CREATE_GUILD,
       });
 
-      return res.data.guild_id;
+      return {
+        guildId: res.data.guild_id,
+        channelId: res.data.channel_id,
+      };
     } else {
       dispatch({
         type: GUILD_ERROR,
@@ -126,7 +134,9 @@ export const updateGuildById = (id: string, data: Partial<Guild>) => async (
   }
 };
 
-export const joinGuild = (code: string) => async (dispatch: React.Dispatch<IDispatch>): Promise<boolean> => {
+export const joinGuild = (code: string) => async (
+  dispatch: React.Dispatch<IDispatch>,
+): Promise<ReturnGuildType | undefined> => {
   try {
     const res = await handleRequest(`/invites/code/${code}`, "POST");
 
@@ -135,12 +145,15 @@ export const joinGuild = (code: string) => async (dispatch: React.Dispatch<IDisp
         type: "JOIN_GUILD",
       });
 
-      return true;
+      return {
+        guildId: res.data.guild_id,
+        channelId: res.data.channelId,
+      };
     } else {
-      return false;
+      return;
     }
   } catch (e) {
     Logger.error("JOIN_GUILD", e);
-    return false;
+    return;
   }
 };

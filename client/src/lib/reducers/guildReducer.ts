@@ -6,6 +6,7 @@ const initState: State["guild"] = {
   guilds: [],
   guild: null,
   error: null,
+  loading: true,
 };
 
 type Actions =
@@ -28,6 +29,7 @@ export default function guildReducer(state = initState, action: Actions): State[
       return {
         ...state,
         guilds: action.guilds,
+        loading: false,
       };
     }
     case "GET_GUILD_BY_ID": {

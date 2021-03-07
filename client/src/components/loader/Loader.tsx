@@ -7,7 +7,6 @@ interface Props {
   size?: number;
 }
 
-// TODO: add fullScreen loader
 const Loader: React.FC<Props> = ({ fullScreen, color, size }) => {
   return (
     <div className={fullScreen ? "full-screen" : ""}>
