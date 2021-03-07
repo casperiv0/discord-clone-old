@@ -3,7 +3,6 @@ import { v4 as uuid } from "uuid";
 import { useAuth } from "../hooks";
 import useValidObjectId from "../hooks/useValidObjectId";
 import IRequest from "../interfaces/IRequest";
-import ChannelModel from "../models/Channel.model";
 import GuildModel from "../models/Guild.model";
 import InviteModel from "../models/Invite.model";
 import UserModel from "../models/User.model";
@@ -92,7 +91,7 @@ router.post("/code/:invite_code", useAuth, async (req: IRequest, res: Response) 
       member_ids: [
         ...guild.member_ids,
         {
-          user_id: req.user!,
+          user_id: `${req.user}`,
           permissions: [],
         },
       ],

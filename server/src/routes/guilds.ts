@@ -50,7 +50,7 @@ router.get("/", useAuth, async (req: IRequest, res: Response) => {
         channels.push(channel);
       }
 
-      guilds.push({ ...(guild as any)?._doc, channels });
+      guilds.push({ ...guild?.toJSON(), channels });
     }
 
     return res.json({ status: "success", guilds });
@@ -79,11 +79,14 @@ router.get("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: IReq
     return res.json(errorObj("Guild was not found"));
   }
 
-  const categories = returnGuildChannels(guild, channelData);
+  const channels = returnGuildChannels(guild, channelData);
 
   return res.json({
     status: "success",
-    guild: { ...(guild as any)._doc, channels: categories },
+    guild: {
+      ...guild.toJSON(),
+      channels,
+    },
   });
 });
 
@@ -113,7 +116,9 @@ router.get("/:guild_id/members", useValidObjectId("guild_id"), useAuth, async (r
       discriminator: 1,
     });
 
-    members.push(member!);
+    if (!member) return;
+
+    members.push(member);
   }
 
   await new Promise((resolve) => setTimeout(resolve, 500));
