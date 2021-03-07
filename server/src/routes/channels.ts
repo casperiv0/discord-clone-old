@@ -2,6 +2,7 @@ import { Router, Response } from "express";
 import slugify from "slugify";
 import { useAuth } from "../hooks";
 import useValidObjectId from "../hooks/useValidObjectId";
+import Max from "../interfaces/Constants";
 import IRequest from "../interfaces/IRequest";
 import ChannelModel from "../models/Channel.model";
 import GuildModel from "../models/Guild.model";
@@ -29,6 +30,16 @@ router.post("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: IRe
     return res.json(errorObj("Channel name cannot be longer than 25 characters")).status(400);
   }
 
+  const guild = await GuildModel.findById(guild_id);
+
+  if (!guild) {
+    return res.json(errorObj("Guild was not found")).status(404);
+  }
+
+  if (guild.channel_ids.length >= Max.CHANNELS) {
+    return res.json(errorObj(`cannot have more than ${Max.CHANNELS} channels per guild`));
+  }
+
   const allChannels = await ChannelModel.find({ guild_id: guild_id });
   const filteredChannels = allChannels.filter((c) =>
     c.type === 1 && c.parent_id === parent_id ? parent_id : "no_parent",
@@ -40,14 +51,8 @@ router.post("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: IRe
     type: Number(type),
     parent_id: type === "1" ? parent_id : "no_parent",
     // TODO: this isn't correct
-    position: Number(type) === 1 ? filteredChannels.length - 1 : allChannels.length - 1,
+    position: Number(type) === 1 ? filteredChannels.length - 1 : 0,
   });
-
-  const guild = await GuildModel.findById(guild_id);
-
-  if (!guild) {
-    return res.json(errorObj("Guild was not found")).status(404);
-  }
 
   guild.channel_ids = [...guild.channel_ids, newChannel._id.toString()];
 
@@ -148,55 +153,35 @@ router.delete(
   async (req: IRequest, res: Response) => {
     const { channel_id, guild_id } = req.params;
 
-    const guild = await GuildModel.findById(guild_id);
-    const user = await UserModel.findById(req.user);
-    const channel = await ChannelModel.findById(channel_id);
-
-    if (!user) {
-      return res.json(errorObj("User was not found"));
-    }
-
-    if (!user.guilds.includes(String(guild_id))) {
-      return res.json(errorObj("User is not in this guild")).status(401);
-    }
-
-    switch (channel?.type) {
-      case 1: {
-        if (!guild?.channel_ids.includes(channel_id)) {
-          return res.json(errorObj("Channel does not exist in this guild"));
-        }
-        break;
-      }
-      case 2: {
-        if (!guild?.category_ids.includes(channel_id)) {
-          return res.json(errorObj("Category does not exist in this guild"));
-        }
-        break;
-      }
-      default: {
-        return res.json(errorObj("Type was invalid"));
-      }
-    }
-
     try {
-      await MessageModel.deleteMany({ guild_id: guild._id, channel_id: channel._id });
+      const guild = await GuildModel.findById(guild_id);
+      const user = await UserModel.findById(req.user);
+      const channel = await ChannelModel.findById(channel_id);
+
+      if (!user) {
+        return res.json(errorObj("User was not found"));
+      }
+
+      if (!user.guilds.includes(String(guild_id))) {
+        return res.json(errorObj("User is not in this guild")).status(401);
+      }
+
+      if (!guild?.channel_ids.includes(channel_id)) {
+        return res.json(errorObj("Channel does not exist in this guild"));
+      }
+
+      await MessageModel.deleteMany({ guild_id: guild._id, channel_id: channel?._id });
       await ChannelModel.findByIdAndDelete(channel?._id);
 
-      if (channel?.type === 1) {
-        await GuildModel.findByIdAndUpdate(guild?._id, {
-          channel_ids: guild.channel_ids.filter((id) => id !== channel_id),
-        });
-      } else {
-        await GuildModel.findByIdAndUpdate(guild?._id, {
-          category_ids: guild.category_ids.filter((id) => id !== channel_id),
-        });
-      }
+      await GuildModel.findByIdAndUpdate(guild?._id, {
+        channel_ids: guild.channel_ids.filter((id) => id !== channel_id),
+      });
+
+      return res.json({ status: "success" });
     } catch (e) {
       logger.error("delete_channel", e);
       return res.json(errorObj("An unexpected error occurred, please try again later")).status(500);
     }
-
-    return res.json({ status: "success" });
   },
 );
 

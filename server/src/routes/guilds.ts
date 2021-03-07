@@ -1,10 +1,12 @@
 import { Router, Response } from "express";
 import { useAuth } from "../hooks";
 import useValidObjectId from "../hooks/useValidObjectId";
+import Max from "../interfaces/Constants";
 import IRequest from "../interfaces/IRequest";
 import ChannelModel, { Channel } from "../models/Channel.model";
-import GuildModel, { Guild } from "../models/Guild.model";
-import UserModel, { User } from "../models/User.model";
+import GuildModel, { Guild, Member } from "../models/Guild.model";
+import MessageModel from "../models/Message.model";
+import UserModel from "../models/User.model";
 import logger from "../utils/logger";
 import { errorObj } from "../utils/utils";
 
@@ -18,12 +20,6 @@ function returnGuildChannels(guild: Guild, channelData: Channel[]) {
 
     channels.push(channel);
   }
-
-  const noCateChannels = channelData.filter(
-    (ch) => ch.parent_id === "no_parent" && ch?.type === 1 && ch?.guild_id === guild._id.toString(),
-  );
-
-  noCateChannels.forEach((ch) => channels.push(ch));
 
   return channels;
 }
@@ -107,18 +103,18 @@ router.get("/:guild_id/members", useValidObjectId("guild_id"), useAuth, async (r
     return res.json(errorObj("Guild was not found"));
   }
 
-  const members: User[] = [];
+  const members: Member[] = [];
   for (let i = 0; i < guild.member_ids.length; i++) {
-    const member = await UserModel.findById(guild.member_ids[i]?.toString(), {
+    const user = await UserModel.findById(guild.member_ids[i].user_id, {
       username: 1,
       _id: 1,
       avatar_id: 1,
       discriminator: 1,
     });
 
-    if (!member) return;
+    if (!user) continue;
 
-    members.push(member);
+    members.push({ user_id: user._id, user, permissions: guild.member_ids[i].permissions });
   }
 
   await new Promise((resolve) => setTimeout(resolve, 500));
@@ -135,6 +131,16 @@ router.post("/", useAuth, async (req: IRequest, res: Response) => {
   try {
     if (!name) {
       return res.json(errorObj("Please provide a server name"));
+    }
+
+    const user = await UserModel.findById(req.user);
+
+    if (!user) {
+      return res.json(errorObj("User was not found"));
+    }
+
+    if (user.guilds.length > Max.GUILDS) {
+      return res.json(errorObj(`cannot be in more than ${Max.GUILDS} guilds`));
     }
 
     const newGuild = await GuildModel.create({
@@ -163,12 +169,6 @@ router.post("/", useAuth, async (req: IRequest, res: Response) => {
       position: 1,
     });
     await channel.save();
-
-    const user = await UserModel.findById(req.user);
-
-    if (!user) {
-      return res.json(errorObj("User was not found"));
-    }
 
     user.guilds = [...user.guilds, newGuild._id.toString()];
 
@@ -226,6 +226,9 @@ router.delete("/:guild_id", useValidObjectId("guild_id"), useAuth, async (req: I
     if (guild?.owner_id?.toString() !== user._id?.toString()) {
       return res.json(errorObj("You are not the owner of this guild"));
     }
+
+    ChannelModel.deleteMany({ guild_id: guild?._id });
+    MessageModel.deleteMany({ guild_id: guild?._id });
 
     await guild?.delete();
     user.guilds = user.guilds.filter((g) => g.toString() !== guild_id);

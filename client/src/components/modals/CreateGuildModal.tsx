@@ -59,8 +59,12 @@ const CreateGuildModal: React.FC<Props> = ({ user, error, guild_id, createGuild,
         <>
           <div className="modal_body">
             <div className="select-type">
-              <button onClick={() => setType("create")}>Create Server</button>
-              <button onClick={() => setType("join")}>Join Server</button>
+              <button className="btn blue" onClick={() => setType("create")}>
+                Create Server
+              </button>
+              <button className="btn blue" onClick={() => setType("join")}>
+                Join Server
+              </button>
             </div>
           </div>
 

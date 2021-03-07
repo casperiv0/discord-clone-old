@@ -2,6 +2,7 @@ import { Router, Response } from "express";
 import { v4 as uuid } from "uuid";
 import { useAuth } from "../hooks";
 import useValidObjectId from "../hooks/useValidObjectId";
+import Max from "../interfaces/Constants";
 import IRequest from "../interfaces/IRequest";
 import GuildModel from "../models/Guild.model";
 import InviteModel from "../models/Invite.model";
@@ -67,7 +68,7 @@ router.post("/code/:invite_code", useAuth, async (req: IRequest, res: Response) 
       return res.json(errorObj("invite not found")).status(404);
     }
 
-    const user = await UserModel.findById(req.user);
+    const user = await UserModel.findById(req.user, { username: 1, _id: 1, avatar_id: 1, discriminator: 1, guilds: 1 });
     const guild = await GuildModel.findById(invite?.guild_id);
 
     if (!guild) {
@@ -82,8 +83,8 @@ router.post("/code/:invite_code", useAuth, async (req: IRequest, res: Response) 
       return res.json(errorObj("you are already in this guild"));
     }
 
-    if (user.guilds.length >= 100) {
-      return res.json(errorObj("cannot join more than 100 guilds"));
+    if (user.guilds.length >= Max.GUILDS) {
+      return res.json(errorObj(`cannot join more than ${Max.GUILDS} guilds`));
     }
 
     await UserModel.findByIdAndUpdate(user._id, { guilds: [...user.guilds, invite.guild_id] });
@@ -91,6 +92,7 @@ router.post("/code/:invite_code", useAuth, async (req: IRequest, res: Response) 
       member_ids: [
         ...guild.member_ids,
         {
+          user,
           user_id: `${req.user}`,
           permissions: [],
         },

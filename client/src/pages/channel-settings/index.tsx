@@ -74,9 +74,10 @@ const ChannelSettingsPage: React.FC<Props> = ({
     if (!channel) return;
     if (!guild) return;
     const deleted = await deleteChannelById(channel?._id, guild?._id);
+    const channelId = guild.channels?.find((c) => c._id !== channel_id && c.type === 1)?._id;
 
     if (deleted) {
-      history.push(`/channels/${guild._id}/${guild.channel_ids[0]}`);
+      history.push(`/channels/${guild._id}/${channelId}`);
     }
   }
 

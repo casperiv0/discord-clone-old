@@ -92,21 +92,8 @@
   flex-direction: column;
 
   button {
-    width: 100%;
-    padding: 0.8rem 0.1rem;
-    margin-bottom: 0.5rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    background: $dark-gray;
-    color: $white;
-    border: 2px solid $dark-gray;
-    font-size: 1.1rem;
-    font-weight: 600;
-    transition: opacity 200ms;
-
-    &:hover {
-      opacity: 0.8;
-    }
+    margin: 0.2rem 0;
+    text-align: center;
   }
 }
 

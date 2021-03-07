@@ -1,4 +1,5 @@
 import { model, Schema, Document } from "mongoose";
+import { User } from "./User.model";
 
 export type Permissions = "ADMIN" | "MANAGE_GUILD";
 
@@ -21,6 +22,7 @@ export interface Guild extends Document {
 
 export interface Member {
   user_id: string;
+  user: User;
   permissions: Permissions[];
 }
 

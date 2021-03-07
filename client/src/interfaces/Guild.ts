@@ -11,7 +11,8 @@ interface Guild {
   created_at: number;
 
   member_ids: string;
-  members: User[];
+  members: Member[];
+  member: Member;
 }
 
 export interface Category extends Channel {
@@ -28,6 +29,12 @@ export interface Channel {
   created_at: number;
   type: number;
   position: number;
+}
+
+export interface Member {
+  user_id: string;
+  user: User;
+  permissions: Permissions[];
 }
 
 export default Guild;
